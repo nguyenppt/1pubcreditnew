@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="283efe99d2674e7ab207e3b5a08623a6" Name="Diagram1" DisplayType="true" ZoomLevel="132">
+        <EntityTypeShape EntityType="EntityDataModel.B_AccountForBuyingTC" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.B_CashWithrawalForBuyingTC" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.B_CustomerSignature" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.B_DEBUG" Width="1.5" PointX="2.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.B_ExchangeRates" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.B_ImportLCPayment" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.B_ImportLCPaymentCharge" Width="1.5" PointX="4.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.B_SellTravellersCheque" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BACCOUNTOFFICER" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BACCOUNT" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BADVISINGANDNEGOTIATION" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BADVISINGANDNEGOTIATION_CHARGES" Width="1.5" PointX="6.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BBANK_BRANCH" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BBANKCODE" Width="1.5" PointX="6.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BBANKING" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BBANKSWIFTCODE" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BBENEFICIARYBANK" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCASHDEPOSIT" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCASHWITHRAWAL" Width="1.5" PointX="8.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCATEGORY" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCHARGECODE" Width="1.5" PointX="8.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCHEQUEISSUE" Width="1.5" PointX="4.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCHEQUESTATU" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCHEQUETYPE" Width="1.5" PointX="6.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCOLLATERAL" Width="1.5" PointX="8.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCOLLATERAL_INFOMATION" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCOLLATERAL_STATUS" Width="1.5" PointX="0.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCOLLATERALCONTINGENT_ENTRY" Width="1.5" PointX="10.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCOLLATERALRIGHT" Width="1.5" PointX="2.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCOLLECTCHARGESBYCASH" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCOLLECTCHARGESFROMACCOUNT" Width="1.5" PointX="4.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCOMMITMENT_CONTRACT" Width="1.5" PointX="10.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCOMMODITY" Width="1.5" PointX="6.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCONFIG" Width="1.5" PointX="10.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCONTINGENTACCOUNT" Width="1.5" PointX="8.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.B_COUNTRY" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCRFROMACCOUNT" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCURRENCY" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCUSTOMER_INFO" Width="1.5" PointX="12.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCUSTOMER_LIMIT_MAIN" Width="1.5" PointX="2.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCUSTOMER_LIMIT_SUB" Width="1.5" PointX="12.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BCUSTOMER" Width="1.5" PointX="4.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BDEPOSITACCT" Width="1.5" PointX="12.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BDOCUMETARYCOLLECTION" Width="1.5" PointX="6.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BDOCUMETARYCOLLECTIONCHARGE" Width="1.5" PointX="12.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BDOCUMETARYCOLLECTIONMT410" Width="1.5" PointX="8.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BDRAWTYPE" Width="1.5" PointX="12.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BDRFROMACCOUNT" Width="1.5" PointX="10.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BDYNAMICCONTROL" Width="1.5" PointX="12.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BDYNAMICDATA" Width="1.5" PointX="14.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BENCOM" Width="1.5" PointX="0.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BENQUIRYCHECK" Width="1.5" PointX="14.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BEXPORT_DOCUMETARYCOLLECTION" Width="1.5" PointX="2.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BEXPORT_LC_ADV_NEGO" Width="1.5" PointX="14.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BFOREIGNEXCHANGE" Width="1.5" PointX="4.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BFREETEXTMESSAGE" Width="1.5" PointX="14.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BIMPORT_DOCUMENTPROCESSING" Width="1.5" PointX="6.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BIMPORT_DOCUMENTPROCESSING_CHARGE" Width="1.5" PointX="14.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BIMPORT_DOCUMENTPROCESSING_MT734" Width="1.5" PointX="8.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BIMPORT_NORMAILLC" Width="1.5" PointX="14.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BIMPORT_NORMAILLC_CHARGE" Width="1.5" PointX="10.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BIMPORT_NORMAILLC_MT700" Width="1.5" PointX="14.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BIMPORT_NORMAILLC_MT707" Width="1.5" PointX="12.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BIMPORT_NORMAILLC_MT740" Width="1.5" PointX="14.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BINCOMINGCOLLECTIONPAYMENT" Width="1.5" PointX="16.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BINCOMINGCOLLECTIONPAYMENTCHARGE" Width="1.5" PointX="0.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BINCOMINGCOLLECTIONPAYMENTMT202" Width="1.5" PointX="16.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BINCOMINGCOLLECTIONPAYMENTMT400" Width="1.5" PointX="2.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BINDUSTRY" Width="1.5" PointX="16.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BINTEREST_RATE" Width="1.5" PointX="4.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BINTEREST_TERM" Width="1.5" PointX="16.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BINTERNALBANKACCOUNT" Width="1.5" PointX="6.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BINTERNALBANKPAYMENTACCOUNT" Width="1.5" PointX="16.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BLCTYPE" Width="1.5" PointX="8.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BLDACCOUNT" Width="1.5" PointX="16.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BLOANGROUP" Width="1.5" PointX="10.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BLOANPURPOSE" Width="1.5" PointX="16.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BLOANWORKINGACCOUNT" Width="1.5" PointX="12.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BMACODE" Width="1.5" PointX="16.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BMENUTOP" Width="1.5" PointX="14.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BNewLoanControl" Width="1.5" PointX="16.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BOPENACCOUNT" Width="1.5" PointX="18.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BOPENACCOUNT_COPY" Width="1.5" PointX="0.75" PointY="18.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BOPENACCOUNT_INTEREST" Width="1.5" PointX="18.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BOUTGOINGCOLLECTIONPAYMENT" Width="1.5" PointX="2.75" PointY="18.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BOUTGOINGCOLLECTIONPAYMENTCHARGE" Width="1.5" PointX="18.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BOUTGOINGCOLLECTIONPAYMENTMT910" Width="1.5" PointX="4.75" PointY="18.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BOVERSEASTRANSFER" Width="1.5" PointX="18.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BOVERSEASTRANSFERCHARGECOMMISSION" Width="1.5" PointX="6.75" PointY="18.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BOVERSEASTRANSFERMT103" Width="1.5" PointX="18.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BPaymentFrequenceControl" Width="1.5" PointX="8.75" PointY="18.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BPAYMENTMETHOD" Width="1.5" PointX="18.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BPLACCOUNT" Width="1.5" PointX="10.75" PointY="18.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BPRODUCTLINE" Width="1.5" PointX="18.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BPRODUCTTYPE" Width="1.5" PointX="12.75" PointY="18.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BPROVINCE" Width="1.5" PointX="18.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BRELATIONCODE" Width="1.5" PointX="14.75" PointY="18.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BRESTRICT_TXN" Width="1.5" PointX="18.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BRPODCATEGORY" Width="1.5" PointX="16.75" PointY="18.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BSalaryPaymentFrequency" Width="1.5" PointX="18.75" PointY="18.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BSalaryPaymentFrequencyDetail" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BSalaryPaymentFrequencyTerm" Width="1.5" PointX="0.75" PointY="20.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BSalaryPaymentMethod" Width="1.5" PointX="20.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BSAVING_ACC_ARREAR" Width="1.5" PointX="2.75" PointY="20.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BSAVING_ACC_DISCOUNTED" Width="1.5" PointX="20.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BSAVING_ACC_INTEREST" Width="1.5" PointX="4.75" PointY="20.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BSAVING_ACC_PERIODIC" Width="1.5" PointX="20.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BSECTOR" Width="1.5" PointX="6.75" PointY="20.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BSWIFTCODE" Width="1.5" PointX="20.75" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BTRANSFERWITHDRAWAL" Width="1.5" PointX="8.75" PointY="20.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.PROVISIONTRANSFER_DC" Width="1.5" PointX="20.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.Sochu" Width="1.5" PointX="10.75" PointY="20.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.sysdiagram" Width="1.5" PointX="20.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BLOANINTEREST_KEY" Width="1.5" PointX="12.75" PointY="20.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.BNEWNORMALLOAN" Width="2.375" PointX="14.75" PointY="20.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.B_LOAN_CREDIT_SCORING" Width="1.5" PointX="20.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="EntityDataModel.B_NORMALLOAN_PAYMENT_SCHEDULE" Width="1.5" PointX="10.495362353741825" PointY="20.088491210755191" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
