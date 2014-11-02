@@ -957,9 +957,10 @@ namespace BankProject.Views.TellerApplication
             DateTime drawdownDate = normalLoanEntryM.Drawdown == null ? (DateTime)normalLoanEntryM.ValueDate : (DateTime)normalLoanEntryM.Drawdown;
             DateTime startDate = (DateTime)normalLoanEntryM.ValueDate;
             DateTime endDate = (DateTime)normalLoanEntryM.MaturityDate;
-            DateTime startInterestDate = drawdownDate; 
+            DateTime startInterestDate = drawdownDate;
             DateTime prevInterestDate = drawdownDate;
             int durationDate = endDate.Subtract(startDate).Days;
+            int interestDay = 0;
             int perios = 0;
             decimal interestedValue = 0;
 
@@ -990,6 +991,8 @@ namespace BankProject.Views.TellerApplication
             }
 
 
+            interestDay = startInterestDate.Day;
+
             if (freq > 0)
             {
                 perios = durationDate / (freq * 30);
@@ -1003,24 +1006,18 @@ namespace BankProject.Views.TellerApplication
             {
                 if (i == perios - 1)
                 {
-                    it = facade.FindLoanControl(normalLoanEntryM.Code, "EI").FirstOrDefault();
+
+                    it = facade.FindLoanControl(normalLoanEntryM.Code, "EP").FirstOrDefault();
                     if (it != null)
                     {
                         startInterestDate = it.Date == null ? startInterestDate : (DateTime)it.Date;
                     }
                     else
                     {
-                        it = facade.FindLoanControl(normalLoanEntryM.Code, "EP").FirstOrDefault();
-                        if (it != null)
-                        {
-                            startInterestDate = it.Date == null ? startInterestDate : (DateTime)it.Date;
-                        }
-                        else
-                        {
-                            startInterestDate = (DateTime)normalLoanEntryM.MaturityDate;
-                        }
-                        
+                        startInterestDate = (DateTime)normalLoanEntryM.MaturityDate;
                     }
+
+
                 }
 
                 DataRow dr = findInstallmantRow(startInterestDate, ds);
@@ -1042,7 +1039,13 @@ namespace BankProject.Views.TellerApplication
 
                 prevInterestDate = startInterestDate;
                 startInterestDate = startInterestDate.AddMonths(freq);
-
+                try
+                {
+                    startInterestDate = new DateTime(((DateTime)startInterestDate).Year, ((DateTime)startInterestDate).Month, interestDay);
+                }
+                catch
+                {
+                }
 
 
                 if (startInterestDate.Subtract(endDate).Days > 0)
@@ -1109,6 +1112,7 @@ namespace BankProject.Views.TellerApplication
             decimal remainAmount = 0;
             DateTime? periosDate = null;
             DateTime? endDate = null;
+            int instalmentdDay = 0;
 
             rateType = String.IsNullOrEmpty(normalLoanEntryM.RateType) ? 1 : int.Parse(normalLoanEntryM.RateType);
 
@@ -1118,6 +1122,8 @@ namespace BankProject.Views.TellerApplication
 
                 remainAmount = (decimal)normalLoanEntryM.LoanAmount;
                 getPaymentInputControl(ref periosDate, ref endDate, ref numberOfPerios, ref instalmant, ref instalmantEnd, ref fregV);
+
+                instalmentdDay = periosDate != null ? ((DateTime)periosDate).Day : 0;
 
                 ds.DtInfor.Rows[0][ds.Cl_freq] = fregV == 0 ? "Cuối kỳ" : fregV + " Tháng";
 
@@ -1133,6 +1139,13 @@ namespace BankProject.Views.TellerApplication
                     dr[ds.Cl_isPaymentRow] = true;
                     ds.DtItems.Rows.Add(dr);
                     periosDate = ((DateTime)periosDate).AddMonths(fregV);
+                    try
+                    {
+                        periosDate = new DateTime(((DateTime)periosDate).Year, ((DateTime)periosDate).Month, instalmentdDay);
+                    }
+                    catch
+                    {
+                    }
                 }
                 dr = ds.DtItems.NewRow();
                 dr[ds.Cl_dueDate] = endDate;
