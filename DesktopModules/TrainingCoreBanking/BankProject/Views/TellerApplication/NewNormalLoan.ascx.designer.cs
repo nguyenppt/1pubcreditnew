@@ -112,22 +112,40 @@ namespace BankProject.Views.TellerApplication {
         protected global::Telerik.Web.UI.RadComboBox rcbPurposeCode;
         
         /// <summary>
-        /// RequiredFieldValidator4 control.
+        /// RequiredFieldValidator16 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator4;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator16;
         
         /// <summary>
-        /// rcbCustomerID control.
+        /// tbCustID control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadComboBox rcbCustomerID;
+        protected global::System.Web.UI.WebControls.TextBox tbCustID;
+        
+        /// <summary>
+        /// lbCust control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbCust;
+        
+        /// <summary>
+        /// tbHDCustID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tbHDCustID;
         
         /// <summary>
         /// rcbLoadGroup control.

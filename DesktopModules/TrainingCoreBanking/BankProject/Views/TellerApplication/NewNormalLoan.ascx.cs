@@ -210,16 +210,16 @@ namespace BankProject.Views.TellerApplication
 
         protected void rcbCustomerID_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
         {
-            LoadCollareralID(rcbCustomerID.SelectedValue, null, null, null, null);
-            LoadLimitReferenceInfor(rcbCustomerID.SelectedValue, null);
-            LoadAllAccount(rcbCustomerID.SelectedValue, rcbCurrency.SelectedValue, null, null, null, null);
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "clickMainTab();", true);
+            //LoadCollareralID(rcbCustomerID.SelectedValue, null, null, null, null);
+            //LoadLimitReferenceInfor(rcbCustomerID.SelectedValue, null);
+            //LoadAllAccount(rcbCustomerID.SelectedValue, rcbCurrency.SelectedValue, null, null, null, null);
+            //Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "clickMainTab();", true);
         }
 
 
         protected void rcbCurrency_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
         {
-            LoadAllAccount(rcbCustomerID.SelectedValue, rcbCurrency.SelectedValue, null, null, null, null);
+            LoadAllAccount(tbHDCustID.Text, rcbCurrency.SelectedValue, null, null, null, null);
         }
         protected void Radcbmaincategory_Selectedindexchanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
         {
@@ -435,7 +435,7 @@ namespace BankProject.Views.TellerApplication
         private void init()
         {
             LoadMainCategoryCombobox(null);
-            LoadCustomerCombobox(null);
+            //LoadCustomerCombobox(null);
             LoadPurposeCode(null);
             LoadGroup(null);
             LoadAccountOfficer(null);
@@ -525,18 +525,36 @@ namespace BankProject.Views.TellerApplication
             radcbMainCategory.SelectedValue = selectedItem;
 
         }
-        private void LoadCustomerCombobox(string SelectedCus)
+        //private void LoadCustomerCombobox(string SelectedCus)
+        //{
+        //    BCustomerRepository facade1 = new BCustomerRepository();
+        //    var db = facade1.getCustomerList("AUT");
+        //    List<BCUSTOMER_INFO> hh = db.ToList<BCUSTOMER_INFO>();
+        //    Util.LoadData2RadCombo(rcbCustomerID, hh, "CustomerID", "ID_FullName", "-Select Customer Code-", false);
+
+
+        //    if (!String.IsNullOrEmpty(SelectedCus))
+        //    {
+        //        rcbCustomerID.SelectedValue = SelectedCus;
+        //    }
+        //}
+
+        private void LoadCustomerInformation(string SelectedCus)
         {
             BCustomerRepository facade1 = new BCustomerRepository();
-            var db = facade1.getCustomerList("AUT");
-            List<BCUSTOMER_INFO> hh = db.ToList<BCUSTOMER_INFO>();
-            Util.LoadData2RadCombo(rcbCustomerID, hh, "CustomerID", "ID_FullName", "-Select Customer Code-", false);
+            var db = facade1.getCustomerInfo(SelectedCus,"AUT");
 
-
-            if (!String.IsNullOrEmpty(SelectedCus))
+            if (db != null)
             {
-                rcbCustomerID.SelectedValue = SelectedCus;
+                tbHDCustID.Text = db.CustomerID;
+                lbCust.Text = db.GBFullName;
             }
+            else
+            {
+                tbHDCustID.Text = String.Empty;
+                lbCust.Text = "Not Found!";
+            }
+
 
         }
         private void LoadLimitReferenceInfor(string custId, string selectedvalue)
@@ -645,8 +663,8 @@ namespace BankProject.Views.TellerApplication
             normalLoanEntry.SubCategoryName = rcbSubCategory.Text;
             normalLoanEntry.PurpostCode = rcbPurposeCode.SelectedValue;
             normalLoanEntry.PurpostName = rcbPurposeCode.Text;
-            normalLoanEntry.CustomerID = rcbCustomerID.SelectedValue;
-            normalLoanEntry.CustomerName = rcbCustomerID.Text.Remove(0, rcbCustomerID.Text.IndexOf("-") + 1);
+            normalLoanEntry.CustomerID = tbHDCustID.Text;
+            normalLoanEntry.CustomerName = lbCust.Text;
             normalLoanEntry.LoanGroup = rcbLoadGroup.SelectedValue;
             normalLoanEntry.LoanGroupName = rcbLoadGroup.Text;
             normalLoanEntry.Currency = rcbCurrency.SelectedValue;
@@ -699,7 +717,8 @@ namespace BankProject.Views.TellerApplication
                 return;
             }
             tbNewNormalLoan.Text = normalLoanEntry.Code;
-            rcbCustomerID.SelectedValue = normalLoanEntry.CustomerID;
+            tbHDCustID.Text = tbCustID.Text = normalLoanEntry.CustomerID;
+            LoadCustomerInformation(normalLoanEntry.CustomerID);
             rcbCurrency.SelectedValue = normalLoanEntry.Currency;
             radcbMainCategory.SelectedValue = normalLoanEntry.MainCategory;
             LoadSubCategory(normalLoanEntry.MainCategory, normalLoanEntry.SubCategory);
@@ -752,7 +771,7 @@ namespace BankProject.Views.TellerApplication
             radcbMainCategory.Enabled = p;
             rcbSubCategory.Enabled = p;
             rcbPurposeCode.Enabled = p;
-            rcbCustomerID.Enabled = p;
+            tbCustID.Enabled = p;
             rcbLoadGroup.Enabled = p;
             tbLoanAmount.Enabled = p;
             rdpMaturityDate.Enabled = p;
@@ -791,7 +810,7 @@ namespace BankProject.Views.TellerApplication
 
         private void disableInCaseOfAmend(bool p)
         {
-            rcbCustomerID.Enabled = p;
+            tbCustID.Enabled = p;
             rcbCurrency.Enabled = p;
             tbLoanAmount.Enabled = p;
             tbApprovedAmt.Enabled = p;
@@ -1280,6 +1299,14 @@ namespace BankProject.Views.TellerApplication
 
 
         #endregion
+
+        protected void tbCustID_TextChanged(object sender, EventArgs e)
+        {
+            LoadCustomerInformation(tbCustID.Text);
+            LoadCollareralID(tbCustID.Text, null, null, null, null);
+            LoadLimitReferenceInfor(tbCustID.Text, null);
+            LoadAllAccount(tbCustID.Text, rcbCurrency.SelectedValue, null, null, null, null);
+        }
 
     }
 
