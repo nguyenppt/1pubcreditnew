@@ -143,7 +143,7 @@
                             
                             <tr >
                                 <td>
-                                    <asp:TextBox Width="50" ID="tbCustID" runat="server" OnTextChanged="tbCustID_TextChanged" AutoPostBack="true" /> - 
+                                    <asp:TextBox Width="100" ID="tbCustID" runat="server" OnTextChanged="tbCustID_TextChanged" AutoPostBack="true" /> - 
                                 </td>
                                 <td>
                                     <asp:Label ID="lbCust" runat="server" Text="Not Found!"></asp:Label>
