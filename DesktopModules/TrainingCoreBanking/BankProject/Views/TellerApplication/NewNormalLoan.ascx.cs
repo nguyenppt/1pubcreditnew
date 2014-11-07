@@ -171,7 +171,7 @@ namespace BankProject.Views.TellerApplication
                     BindField2Data(ref normalLoanEntryM);
                     loanBusiness.Entity = normalLoanEntryM;
                     loanBusiness.authorizeProcess(this.UserId);
-                    UpdateSchedulePaymentToDB();
+                    //UpdateSchedulePaymentToDB();
                     this.Response.Redirect("Default.aspx?tabid=" + this.TabId);
                     break;
 
@@ -984,7 +984,7 @@ namespace BankProject.Views.TellerApplication
                 princleSchedue.LoanAmount = decimal.Parse((dtInfor.Rows[0]["LoanAmount"].ToString().Replace(",", "")));
 
                 if (dtInfor.Rows[0]["Drawdown"] != null)
-                    princleSchedue.Drawdown = (DateTime)dtInfor.Rows[0]["Drawdown"];
+                    princleSchedue.Drawdown = (DateTime)dtInfor.Rows[0]["Drawdown"] == null ? (this.disbursalDate == null ? null : disbursalDate) : null;
                 princleSchedue.InterestKey = dtInfor.Rows[0]["InterestKey"].ToString();
                 princleSchedue.Freq = dtInfor.Rows[0]["Freq"].ToString();
 
@@ -1002,6 +1002,7 @@ namespace BankProject.Views.TellerApplication
                 princleSchedue.InterestAmount = (Decimal)it["InterestAmount"];
                 princleSchedue.CreateBy = this.UserId;
                 princleSchedue.CreateDate = facde.GetSystemDatetime();
+                princleSchedue.PeriodRepaid = 0;
                 facde.Add(princleSchedue);
 
             }
