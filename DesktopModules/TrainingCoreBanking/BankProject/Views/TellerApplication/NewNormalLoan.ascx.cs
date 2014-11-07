@@ -25,6 +25,7 @@ namespace BankProject.Views.TellerApplication
         BNEWNORMALLOAN normalLoanEntryM;
         bool isApprovalRole = false;
         public double remainLoanAmountDis = 0;
+        private DateTime? disbursalDate = null;
 
         private string REFIX_MACODE = "LD";
         bool isEdit = false;
@@ -1061,7 +1062,7 @@ namespace BankProject.Views.TellerApplication
 
             int freq = 0;
             String rateType = "1";
-            DateTime drawdownDate = normalLoanEntryM.Drawdown == null ? (DateTime)normalLoanEntryM.ValueDate : (DateTime)normalLoanEntryM.Drawdown;
+            DateTime drawdownDate = normalLoanEntryM.Drawdown == null ?  (this.disbursalDate == null? (DateTime)normalLoanEntryM.ValueDate : (DateTime)this.disbursalDate)  : (DateTime)normalLoanEntryM.Drawdown;
             DateTime startDate = (DateTime)normalLoanEntryM.ValueDate;
             DateTime endDate = (DateTime)normalLoanEntryM.MaturityDate;
             DateTime startInterestDate = drawdownDate;
@@ -1346,9 +1347,29 @@ namespace BankProject.Views.TellerApplication
 
             ds.DtItems.DefaultView.Sort = "DueDate asc";
             ds.DtItems = ds.DtItems.DefaultView.ToTable();
+            decimal currentProcessAmount = 0;
+
+            if(ds.DtItems!=null && ds.DtItems.Rows.Count>0)
+            {
+                disbursalDate = (DateTime)ds.DtItems.Rows[0][ds.Cl_dueDate.ColumnName];
+            }
+            
+            foreach (DataRow dr in ds.DtItems.Rows)
+            {
+                if ((decimal)dr[ds.Cl_PrintOs.ColumnName] != 0)
+                {
+                    currentProcessAmount = (decimal)dr[ds.Cl_PrintOs.ColumnName];
+                }
+                else
+                {
+                    dr[ds.Cl_PrintOs.ColumnName] = currentProcessAmount;
+                }
+
+          
+            }
 
             //Process update disbursal amount to prinos
-            decimal currentProcessAmount = 0;
+            currentProcessAmount = 0;
             foreach (DataRow dr in ds.DtItems.Rows)
             {
                 currentProcessAmount = currentProcessAmount + (decimal)dr[ds.Cl_DisbursalAmount.ColumnName];
