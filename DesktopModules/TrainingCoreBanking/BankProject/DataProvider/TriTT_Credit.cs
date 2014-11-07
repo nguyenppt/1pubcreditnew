@@ -201,6 +201,10 @@ namespace BankProject.DataProvider
         {
             return sqldata.ndkExecuteDataset("B_OPEN_LOANWORK_ACCT_Check_Acct_Exist", CustomerID, Currency);
         }
+        public static DataSet Load_Customer_Info_From_BCUSTOMER_INFO(string CustomerID)
+        {
+            return sqldata.ndkExecuteDataset("Load_Customer_Info_From_BCUSTOMER_INFO", CustomerID);
+        }
         #endregion
         #region B_OPEN_COMMITMENT_CONTRACT
         public static DataSet B_OPEN_COMMITMENT_CONT_Load_ALLRepayAcct(string CustomerID, string Currency, string CategoryType)
