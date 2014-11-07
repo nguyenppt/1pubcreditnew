@@ -48,6 +48,7 @@ namespace BankProject.Business
         {
             if (Entity == null || String.IsNullOrEmpty(Entity.Code)) return;
             BNEWNORMALLOAN existLoan = facade.findExistingLoan(Entity.Code, null, null).FirstOrDefault();
+
             if (existLoan != null)
             {
                 Entity.UpdatedBy = userID;
@@ -60,6 +61,7 @@ namespace BankProject.Business
                 Entity.CreateBy = userID;
                 Entity.CreateDate = facade.GetSystemDatetime();
                 Entity.Status = "UNA";
+                Entity.RepaymentTimes = 0;
                 facade.Add(Entity);
             }
             
