@@ -131,12 +131,6 @@
     <Content Include="Controls\VVMutiControls.ascx" />
     <Content Include="Controls\VVNumberBox.ascx" />
     <Content Include="Controls\VVTextBox.ascx" />
-    <Content Include="FTTeller\InwardProcessCreditAcc_PL.ascx" />
-    <Content Include="FTTeller\InwardProcessCreditAcc.ascx" />
-    <Content Include="FTTeller\InwardCashWithdraw_PL.ascx" />
-    <Content Include="FTTeller\InwardCashWithdraw.ascx" />
-    <Content Include="FTTeller\OutwardTransferByCash_PL.ascx" />
-    <Content Include="FTTeller\OutwardTransferByCash.ascx" />
     <Content Include="InputCollateralInformation.ascx" />
     <Content Include="InputCollateralInformation_PL.ascx" />
     <Content Include="NormalCLControls\ProvisionTransfer.ascx" />
@@ -290,6 +284,7 @@
     <Compile Include="DataProvider\ThanhLP.cs" />
     <Compile Include="DataProvider\TransactionStatus.cs" />
     <Compile Include="DataProvider\TriTT.cs" />
+    <Compile Include="DataProvider\TriTT_Credit.cs" />
     <Compile Include="DBContext\BACCOUNT.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
@@ -644,6 +639,9 @@
     <Compile Include="DBContext\B_NORMALLOAN_PAYMENT_SCHEDULE.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\B_Normal_Loan_Get_Productline_Info_Result.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\B_SellTravellersCheque.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
@@ -716,48 +714,6 @@
     <Compile Include="Entity\TriTT_Saving\SavingAccount.cs" />
     <Compile Include="Entity\TriTT_Saving\SavingAccount_SQL.cs" />
     <Compile Include="Entity\WorkingBankAccount.cs" />
-    <Compile Include="FTTeller\InwardProcessCreditAcc_PL.ascx.cs">
-      <DependentUpon>InwardProcessCreditAcc_PL.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="FTTeller\InwardProcessCreditAcc_PL.ascx.designer.cs">
-      <DependentUpon>InwardProcessCreditAcc_PL.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="FTTeller\InwardProcessCreditAcc.ascx.cs">
-      <DependentUpon>InwardProcessCreditAcc.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="FTTeller\InwardProcessCreditAcc.ascx.designer.cs">
-      <DependentUpon>InwardProcessCreditAcc.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="FTTeller\InwardCashWithdraw_PL.ascx.cs">
-      <DependentUpon>InwardCashWithdraw_PL.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="FTTeller\InwardCashWithdraw_PL.ascx.designer.cs">
-      <DependentUpon>InwardCashWithdraw_PL.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="FTTeller\InwardCashWithdraw.ascx.cs">
-      <DependentUpon>InwardCashWithdraw.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="FTTeller\InwardCashWithdraw.ascx.designer.cs">
-      <DependentUpon>InwardCashWithdraw.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="FTTeller\OutwardTransferByCash_PL.ascx.cs">
-      <DependentUpon>OutwardTransferByCash_PL.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="FTTeller\OutwardTransferByCash_PL.ascx.designer.cs">
-      <DependentUpon>OutwardTransferByCash_PL.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="FTTeller\OutwardTransferByCash.ascx.cs">
-      <DependentUpon>OutwardTransferByCash.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="FTTeller\OutwardTransferByCash.ascx.designer.cs">
-      <DependentUpon>OutwardTransferByCash.ascx</DependentUpon>
-    </Compile>
     <Compile Include="InputCollateralInformation.ascx.cs">
       <DependentUpon>InputCollateralInformation.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1372,6 +1328,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="FTTeller\" />
     <Folder Include="Report\Export\" />
     <Folder Include="TellerApplication\AccountManagement\CurrentNonTermSavingAC\" />
   </ItemGroup>

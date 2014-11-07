@@ -298,10 +298,10 @@ namespace BankProject.DataProvider
         {
             return sqldata.ndkExecuteDataset("B_CUSTOMER_LIMIT_SUB_Load_for_tab_ORTHER_DETAILS", SubLimitID);
         }
-        public static DataSet B_CUSTOMER_LIMIT_ENQUIRY(string MaHanMucCha, string MaHanMucCon, string CustomerName, string CustomerID, string CollateralType,
+        public static DataSet B_CUSTOMER_LIMIT_ENQUIRY(string LimitType,string MaHanMucCha, string MaHanMucCon, string CustomerName, string CustomerID, string CollateralType,
             string CollateralCode, string Currency, double FromIntLimitAmt, double ToItnLimitAmt)
         {
-            return sqldata.ndkExecuteDataset("B_CUSTOMER_LIMIT_ENQUIRY", MaHanMucCha, MaHanMucCon, CustomerName, CustomerID, CollateralType, CollateralCode,
+            return sqldata.ndkExecuteDataset("B_CUSTOMER_LIMIT_ENQUIRY",LimitType, MaHanMucCha, MaHanMucCon, CustomerName, CustomerID, CollateralType, CollateralCode,
                 Currency, FromIntLimitAmt, ToItnLimitAmt);
         }
         public static string B_CUSTOMER_LIMIT_LoadCustomerName(string CustomerID)
