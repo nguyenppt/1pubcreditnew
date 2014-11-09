@@ -1109,6 +1109,7 @@
     <asp:HiddenField ID="hfLoanAmount" runat="server" />
     <asp:HiddenField ID="hfCommitNumber" Value="0" runat="server" />
     <asp:HiddenField ID="hfCommit2" Value="0" runat="server" />
+    <asp:HiddenField ID="hfRepaymentTimes" Value="0" runat="server" />
 </div>
 
 <telerik:radajaxmanager id="RadAjaxManager1" runat="server"

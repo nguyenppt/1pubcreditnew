@@ -355,11 +355,12 @@
         <table width="100%" cellpadding="0" cellspacing="0" >
             <tr>   
                 <td style="width: 50px;" class="MyLable">
-                    Outstandting Amount: <telerik:radnumerictextbox value="3" id="Radnumerictextbox1" runat="server"  width="150" />
+                    Outstandting Amount: <telerik:radnumerictextbox value="20000000" id="tbOutstandingAmount" runat="server"  width="150" />
                 </td>            
                 
                 
             </tr>
+           
         </table>
         <hr />
         
@@ -652,6 +653,7 @@
         </asp:UpdatePanel>
     </div>
 
+    <asp:HiddenField ID="hfRepaymentTimes" Value="0" runat="server" />
 </div>
 
 <telerik:radajaxmanager id="RadAjaxManager1" runat="server"

@@ -364,13 +364,13 @@ namespace BankProject.Views.TellerApplication {
         protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary2;
         
         /// <summary>
-        /// Radnumerictextbox1 control.
+        /// tbOutstandingAmount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadNumericTextBox Radnumerictextbox1;
+        protected global::Telerik.Web.UI.RadNumericTextBox tbOutstandingAmount;
         
         /// <summary>
         /// UpdatePanel5 control.
@@ -389,6 +389,15 @@ namespace BankProject.Views.TellerApplication {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListView lvLoanControl;
+        
+        /// <summary>
+        /// hfRepaymentTimes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfRepaymentTimes;
         
         /// <summary>
         /// RadAjaxManager1 control.
