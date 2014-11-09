@@ -7,7 +7,7 @@ using System.Web;
 
 namespace BankProject.Business
 {
-    public class NewNormalLoanRepaymentBusiness : INewNormalLoanBusiness<BNEWNORMALLOAN>
+    public class NewNormalLoanRepaymentBusiness :NormalLoanBaseBusiness,  INewNormalLoanBusiness<BNEWNORMALLOAN>
     {
         NormalLoanRepository facade = new NormalLoanRepository();
         public BNEWNORMALLOAN Entity
@@ -26,7 +26,7 @@ namespace BankProject.Business
 
         public void loadEntrities(ref List<BNEWNORMALLOAN> entries)
         {
-            entries = facade.findAllNormalLoans("AUT", null, "UAT").ToList();
+            entries = facade.findAllNormalLoans("AUT", null, "UNA").ToList();
         }
 
         public void commitProcess(int userID)
@@ -73,8 +73,10 @@ namespace BankProject.Business
                 Entity.Repaid_AuthorizedBy = userID;
                 Entity.Repaid_AuthorizedDate = facade.GetSystemDatetime();
                 Entity.Repaid_Status = "AUT";
+                Entity.RepaymentTimes = Entity.RepaymentTimes + 1;
                 facade.Update(existLoan, Entity);
                 facade.Commit();
+
             }
         }
     }
