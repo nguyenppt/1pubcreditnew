@@ -27,7 +27,6 @@ namespace BankProject.Views.TellerApplication
         bool isApprovalRole = false;
         public double remainLoanAmountDis = 0;
         private string REFIX_MACODE = "LD";
-        bool isAmendPage = false;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -123,18 +122,18 @@ namespace BankProject.Views.TellerApplication
         }
 
 
-        protected void rcbCustomerID_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
-        {
+        //protected void rcbCustomerID_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
+        //{
 
-            LoadLimitReferenceInfor(rcbCustomerID.SelectedValue, null);
-            LoadAllAccount(rcbCustomerID.SelectedValue, rcbCurrency.SelectedValue, null, null, null, null);
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "clickMainTab();", true);
-        }
+        //    LoadLimitReferenceInfor(rcbCustomerID.SelectedValue, null);
+        //    LoadAllAccount(rcbCustomerID.SelectedValue, rcbCurrency.SelectedValue, null, null, null, null);
+        //    Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "clickMainTab();", true);
+        //}
 
 
         protected void rcbCurrency_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
         {
-            LoadAllAccount(rcbCustomerID.SelectedValue, rcbCurrency.SelectedValue, null, null, null, null);
+            LoadAllAccount(tbHDCustID.Text, rcbCurrency.SelectedValue, null, null, null, null);
         }
         protected void Radcbmaincategory_Selectedindexchanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
         {
@@ -254,10 +253,51 @@ namespace BankProject.Views.TellerApplication
 
         }
 
+        protected void tbCustID_TextChanged(object sender, EventArgs e)
+        {
+            LoadCustomerInformation(tbCustID.Text);        
+            LoadLimitReferenceInfor(tbCustID.Text, null);
+            LoadAllAccount(tbCustID.Text, rcbCurrency.SelectedValue, null, null, null, null);
+        }
+
+        
 
         #endregion
 
         #region Common Function
+
+        private void LoadCustomerInformation(string SelectedCus)
+        {
+            BCustomerRepository facade1 = new BCustomerRepository();
+            var db = facade1.getCustomerInfo(SelectedCus, "AUT");
+
+            if (db != null)
+            {
+                tbHDCustID.Text = db.CustomerID;
+                lbCust.Text = db.GBFullName;
+            }
+            else
+            {
+                tbHDCustID.Text = String.Empty;
+                lbCust.Text = "Not Found!";
+            }
+
+
+        }
+        private void LoadLimitReferenceInfor(string custId, string selectedvalue)
+        {
+
+            CustomerLimitSubRepository facade = new CustomerLimitSubRepository();
+            var src = facade.FindLimitCusSub(custId).ToList();
+            Util.LoadData2RadCombo(rcbLimitReference, src, "SubLimitID", "SubLimitID", "-Select Limit Refer-", false);
+
+
+            if (!String.IsNullOrEmpty(selectedvalue))
+            {
+                rcbLimitReference.SelectedValue = selectedvalue;
+            }
+        }
+
         private void processApproriateAction()
         {
             if (normalLoanEntryM == null || String.IsNullOrEmpty(normalLoanEntryM.Code))
@@ -297,7 +337,6 @@ namespace BankProject.Views.TellerApplication
         private void init()
         {
             LoadMainCategoryCombobox(null);
-            LoadCustomerCombobox(null);
             LoadPurposeCode(null);
             LoadGroup(null);
             LoadInterestKey(null);
@@ -376,33 +415,21 @@ namespace BankProject.Views.TellerApplication
             radcbMainCategory.SelectedValue = selectedItem;
 
         }
-        private void LoadCustomerCombobox(string SelectedCus)
-        {
-            BCustomerRepository facade1 = new BCustomerRepository();
-            var db = facade1.getCustomerList("AUT");
-            List<BCUSTOMER_INFO> hh = db.ToList<BCUSTOMER_INFO>();
-            Util.LoadData2RadCombo(rcbCustomerID, hh, "CustomerID", "ID_FullName", "-Select Customer Code-", false);
+        //private void LoadCustomerCombobox(string SelectedCus)
+        //{
+        //    BCustomerRepository facade1 = new BCustomerRepository();
+        //    var db = facade1.getCustomerList("AUT");
+        //    List<BCUSTOMER_INFO> hh = db.ToList<BCUSTOMER_INFO>();
+        //    Util.LoadData2RadCombo(rcbCustomerID, hh, "CustomerID", "ID_FullName", "-Select Customer Code-", false);
 
 
-            if (!String.IsNullOrEmpty(SelectedCus))
-            {
-                rcbCustomerID.SelectedValue = SelectedCus;
-            }
+        //    if (!String.IsNullOrEmpty(SelectedCus))
+        //    {
+        //        rcbCustomerID.SelectedValue = SelectedCus;
+        //    }
 
-        }
-        private void LoadLimitReferenceInfor(string custId, string selectedvalue)
-        {
-
-            CustomerLimitSubRepository facade = new CustomerLimitSubRepository();
-            var src = facade.FindLimitCusSub(custId).ToList();
-            Util.LoadData2RadCombo(rcbLimitReference, src, "SubLimitID", "SubLimitID", "-Select Limit Refer-", false);
-
-
-            if (!String.IsNullOrEmpty(selectedvalue))
-            {
-                rcbLimitReference.SelectedValue = selectedvalue;
-            }
-        }
+        //}
+        
 
         void LoadAllAccount(string custID, string currency, string credit, string printRep, string inRep, string chagreRep)
         {
@@ -470,7 +497,7 @@ namespace BankProject.Views.TellerApplication
                 return;
             }
             tbNewNormalLoan.Text = normalLoanEntry.Code;
-            rcbCustomerID.SelectedValue = normalLoanEntry.CustomerID;
+            tbHDCustID.Text = tbCustID.Text = normalLoanEntry.CustomerID;
             rcbCurrency.SelectedValue = normalLoanEntry.Currency;
             radcbMainCategory.SelectedValue = normalLoanEntry.MainCategory;
             LoadSubCategory(normalLoanEntry.MainCategory, normalLoanEntry.SubCategory);
@@ -497,7 +524,19 @@ namespace BankProject.Views.TellerApplication
             lbPDStatus.Text = normalLoanEntry.PDStatus;
             hfRepaymentTimes.Value = (normalLoanEntry.RepaymentTimes + 1) + "";
             LoadDataTolvLoanControl();
+            LoanRemainLoanAmount();
+            
+
+
             //Page.ClientScript.RegisterStartupScript(this.GetType(), "Dis", "LoadDrawdown();", true);
+        }
+
+        private void LoanRemainLoanAmount()
+        {
+            StoreProRepository facade = new StoreProRepository();
+            var amt = facade.StoreProcessor().B_Normal_Loan_GetRemainLoanAmount(tbNewNormalLoan.Text).FirstOrDefault();
+            tbOutstandingAmount.Value = (double?)amt;
+
         }
         private void LoadSubCategory(string categoryid, string selectedValue)
         {
@@ -519,7 +558,7 @@ namespace BankProject.Views.TellerApplication
             radcbMainCategory.Enabled = p;
             rcbSubCategory.Enabled = p;
             rcbPurposeCode.Enabled = p;
-            rcbCustomerID.Enabled = p;
+            tbCustID.Enabled = p;
             rcbLoadGroup.Enabled = p;
             tbLoanAmount.Enabled = p;
             rdpMaturityDate.Enabled = p;
@@ -536,7 +575,7 @@ namespace BankProject.Views.TellerApplication
             tbApprovedAmt.Enabled = p;
 
             rcbBusDay.Enabled = p;
-
+            tbOutstandingAmount.Enabled = false;
             lvLoanControl.Enabled = p;
 
             rcbDefineSch.Enabled = p;
@@ -546,7 +585,7 @@ namespace BankProject.Views.TellerApplication
 
         private void disableInCaseOfAmend(bool p)
         {
-            rcbCustomerID.Enabled = p;
+            tbCustID.Enabled = p;
             rcbCurrency.Enabled = p;
             tbLoanAmount.Enabled = p;
             tbApprovedAmt.Enabled = p;
@@ -574,7 +613,7 @@ namespace BankProject.Views.TellerApplication
             SetEnabledControls(false);
             if (normalLoanEntryM != null && !String.IsNullOrEmpty(normalLoanEntryM.Code))
             {
-                lvLoanControl.Enabled = true;
+                lvLoanControl.Enabled = allowCommit;
             }
             else
             {
