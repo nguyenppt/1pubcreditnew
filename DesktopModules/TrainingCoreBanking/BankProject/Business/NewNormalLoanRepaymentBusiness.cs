@@ -20,7 +20,7 @@ namespace BankProject.Business
         {
             if (entry != null && !String.IsNullOrEmpty(entry.Code))
             {
-                entry = facade.findExistingLoan(entry.Code, "AUT", null).FirstOrDefault();
+                entry = facade.findExistingLoanRepayment(entry.Code, "AUT", null).FirstOrDefault();
             }
         }
 
