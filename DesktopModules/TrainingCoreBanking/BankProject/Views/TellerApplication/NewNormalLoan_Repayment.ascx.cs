@@ -494,10 +494,12 @@ namespace BankProject.Views.TellerApplication
         {
             if (normalLoanEntry == null)
             {
-                return;
+                normalLoanEntry = new BNEWNORMALLOAN();
+                normalLoanEntry.Code = tbNewNormalLoan.Text;
             }
             tbNewNormalLoan.Text = normalLoanEntry.Code;
             tbHDCustID.Text = tbCustID.Text = normalLoanEntry.CustomerID;
+            LoadCustomerInformation(normalLoanEntry.CustomerID);
             rcbCurrency.SelectedValue = normalLoanEntry.Currency;
             radcbMainCategory.SelectedValue = normalLoanEntry.MainCategory;
             LoadSubCategory(normalLoanEntry.MainCategory, normalLoanEntry.SubCategory);
