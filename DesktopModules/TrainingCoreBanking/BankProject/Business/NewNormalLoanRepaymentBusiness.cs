@@ -77,6 +77,17 @@ namespace BankProject.Business
                 facade.Update(existLoan, Entity);
                 facade.Commit();
 
+                CashRepaymentRepository cashFacade = new CashRepaymentRepository();
+                var cashRepay = cashFacade.FindActiveCashRepayment(Entity.CreditAccount).FirstOrDefault();
+
+                if (cashRepay != null && cashRepay.AmountDeposited != null)
+                {
+                    var cashRepayN = cashFacade.FindActiveCashRepayment(Entity.CreditAccount).FirstOrDefault();
+                    cashRepayN.RepaidLoanFlag = 1;
+                    cashFacade.Update(cashRepay, cashRepayN);
+                    cashFacade.Commit();
+                }
+
             }
         }
     }
