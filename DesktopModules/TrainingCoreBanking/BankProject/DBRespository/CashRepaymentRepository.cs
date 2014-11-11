@@ -11,7 +11,8 @@ namespace BankProject.DBRespository
     {
         public IQueryable<BCASH_REPAYMENT> FindActiveCashRepayment(string custAccID)
         {
-            Expression<Func<BCASH_REPAYMENT, bool>> query = t => t.CustomerAccountID.Equals(custAccID) && t.ActiveFlag.Equals("1") && t.RepaidLoanFlag == 0;
+            Expression<Func<BCASH_REPAYMENT, bool>> query = t => t.CustomerAccountID.Equals(custAccID) 
+                && t.ActiveFlag.Equals("1") && t.RepaidLoanFlag == 0 && t.Status.Equals("AUT");
             return Find(query);
         }
     }
