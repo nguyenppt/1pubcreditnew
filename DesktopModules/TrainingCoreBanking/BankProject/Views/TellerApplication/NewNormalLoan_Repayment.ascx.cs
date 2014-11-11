@@ -171,6 +171,7 @@ namespace BankProject.Views.TellerApplication
             item.Freq = freq.Text;
             item.Code = tbNewNormalLoan.Text;
             item.ID = Int32.Parse(lbID.Text);
+            item.PeriodRepaid = int.Parse(hfRepaymentTimes.Value);
             NewLoanControlRepository facade = new NewLoanControlRepository();
             BNewLoanControl exits = facade.GetById(item.ID);
             if (exits != null)
@@ -526,18 +527,34 @@ namespace BankProject.Views.TellerApplication
             lbPDStatus.Text = normalLoanEntry.PDStatus;
             hfRepaymentTimes.Value = (normalLoanEntry.RepaymentTimes + 1) + "";
             LoadDataTolvLoanControl();
-            LoanRemainLoanAmount();
+            LoadRemainLoanAmount();
             
 
 
             //Page.ClientScript.RegisterStartupScript(this.GetType(), "Dis", "LoadDrawdown();", true);
         }
 
-        private void LoanRemainLoanAmount()
+        private void LoadRemainLoanAmount()
         {
             StoreProRepository facade = new StoreProRepository();
+            CashRepaymentRepository cashFacade = new CashRepaymentRepository();
+            double remainAmount = 0;
+
             var amt = facade.StoreProcessor().B_Normal_Loan_GetRemainLoanAmount(tbNewNormalLoan.Text).FirstOrDefault();
-            tbOutstandingAmount.Value = (double?)amt;
+
+            remainAmount = amt == null ? 0 : (double)amt;
+
+            if(normalLoanEntryM!=null && !String.IsNullOrEmpty(normalLoanEntryM.CreditAccount)){
+                var cashRepay = cashFacade.FindActiveCashRepayment(normalLoanEntryM.CreditAccount).FirstOrDefault();
+
+                if (cashRepay != null && cashRepay.AmountDeposited != null)
+                {
+                    remainAmount = remainAmount - (cashRepay.AmountDeposited == null ? 0 : (double)cashRepay.AmountDeposited);
+                }
+
+            }
+
+            tbOutstandingAmount.Value = remainAmount;
 
         }
         private void LoadSubCategory(string categoryid, string selectedValue)
