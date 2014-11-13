@@ -212,8 +212,11 @@
   <ItemGroup>
     <Compile Include="Business\ICommonBusiness.cs" />
     <Compile Include="Business\INewNormalLoanBusiness.cs" />
+    <Compile Include="Business\LoanContractScheduleDS.cs" />
     <Compile Include="Business\NewNormalLoanAmendBusiness.cs" />
     <Compile Include="Business\NewNormalLoanBusiness.cs" />
+    <Compile Include="Business\NewNormalLoanRepaymentBusiness.cs" />
+    <Compile Include="Business\NormalLoanBaseBusiness.cs" />
     <Compile Include="Common\Util.cs" />
     <Compile Include="Controls\ComboBoxItem.cs" />
     <Compile Include="Controls\Commands.cs" />
@@ -294,6 +297,12 @@
     <Compile Include="DBContext\BADVISINGANDNEGOTIATION.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\BAdvisingAndNegotiationLC.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BAdvisingAndNegotiationLCCharge.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\BADVISINGANDNEGOTIATION_CHARGES.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
@@ -304,6 +313,9 @@
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BBANKSWIFTCODE.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BBANKSWIFTCODE_TMP.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BBANK_BRANCH.cs">
@@ -318,7 +330,13 @@
     <Compile Include="DBContext\BCASHWITHRAWAL.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\BCASH_REPAYMENT.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\BCATEGORY.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BCATEGORY_COPY.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BCHARGECODE.cs">
@@ -352,6 +370,9 @@
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BCOLLECTCHARGESFROMACCOUNT.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BCOLLECTION_FOR_CRE_CARD_PAYM.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BCOMMITMENT_CONTRACT.cs">
@@ -414,7 +435,19 @@
     <Compile Include="DBContext\BENQUIRYCHECK.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\BEXPORTCOLLECTIONPAYMENT.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BEXPORT_DOCUMENTPROCESSING.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BEXPORT_DOCUMENTPROCESSINGCHARGE.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\BEXPORT_DOCUMETARYCOLLECTION.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BEXPORT_DOCUMETARYCOLLECTIONCHARGES.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BEXPORT_LC_ADV_NEGO.cs">
@@ -450,10 +483,16 @@
     <Compile Include="DBContext\BIMPORT_NORMAILLC_MT740.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\BIMPORT_NORMAILLC_MT747.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\BINCOMINGCOLLECTIONPAYMENT.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BINCOMINGCOLLECTIONPAYMENTCHARGE.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BINCOMINGCOLLECTIONPAYMENTMT103.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BINCOMINGCOLLECTIONPAYMENTMT202.cs">
@@ -507,6 +546,9 @@
     <Compile Include="DBContext\BNEWNORMALLOAN.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\BNEWNORMALLOAN_REPAYMENT.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\BOPENACCOUNT.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
@@ -543,7 +585,16 @@
     <Compile Include="DBContext\BOVERSEASTRANSFERCHARGECOMMISSION.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\BOVERSEASTRANSFERCHARGECOMMISSION_TMP.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\BOVERSEASTRANSFERMT103.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BOVERSEASTRANSFERMT103_TMP.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BOVERSEASTRANSFER_TMP.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BPaymentFrequenceControl.cs">
@@ -556,6 +607,9 @@
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BPRODUCTLINE.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\BPRODUCTLINE_COPY.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\BPRODUCTTYPE.cs">
@@ -606,13 +660,25 @@
     <Compile Include="DBContext\BTRANSFERWITHDRAWAL.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\BTRANSFER_4_CRE_CARD_PAYMENT.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\B_AccountForBuyingTC.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_AddConfirmInfo.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\B_BRPODCATEGORY_GetAll_IdOver200_Result.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\B_BuyTravellersCheque.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\B_CashWithrawalForBuyingTC.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_CheckBatchRunning.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\B_COUNTRY.cs">
@@ -624,7 +690,28 @@
     <Compile Include="DBContext\B_DEBUG.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\B_Denomination.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_ExchangeBanknotesManyDeno.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\B_ExchangeRates.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_ExportLCPayment.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_ExportLCPaymentCharge.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_ExportLCPaymentMT202.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_ExportLCPaymentMT756.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_ForeignExchange.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\B_ImportLCPayment.cs">
@@ -633,7 +720,19 @@
     <Compile Include="DBContext\B_ImportLCPaymentCharge.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBContext\B_ImportLCPaymentMT202.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_ImportLCPaymentMT756.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBContext\B_LOAN_CREDIT_SCORING.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_LOAN_DISBURSAL_SCHEDULE.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_LOAN_PROCESS_PAYMENT.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\B_NORMALLOAN_PAYMENT_SCHEDULE.cs">
@@ -643,6 +742,9 @@
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\B_SellTravellersCheque.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBContext\B_WUXOOMCashAdvance.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DBContext\EntityDataModel.Context.cs">
@@ -675,6 +777,7 @@
     <Compile Include="DBRespository\BaseRepository.cs" />
     <Compile Include="DBRespository\BCustomerRepository.cs" />
     <Compile Include="DBRespository\BInterestTermRepository.cs" />
+    <Compile Include="DBRespository\CashRepaymentRepository.cs" />
     <Compile Include="DBRespository\CollateralInformationRepository.cs" />
     <Compile Include="DBRespository\CollorateRightRepository.cs" />
     <Compile Include="DBRespository\CountryRepository.cs" />
@@ -683,11 +786,13 @@
     <Compile Include="DBRespository\IOpenAccountRepository.cs" />
     <Compile Include="DBRespository\IRepositoryDB.cs" />
     <Compile Include="DBRespository\LoanCreditScoringRepository.cs" />
+    <Compile Include="DBRespository\LoanDisbursalScheduleRespository.cs" />
     <Compile Include="DBRespository\LoanGroupRepository.cs" />
     <Compile Include="DBRespository\LoanPurposeRepository.cs" />
     <Compile Include="DBRespository\NewLoanControlRepository.cs" />
     <Compile Include="DBRespository\NewLoanInterestedKeyRepository.cs" />
     <Compile Include="DBRespository\NormalLoanPaymentSchedule.cs" />
+    <Compile Include="DBRespository\NormalLoanRepaymentRepository.cs" />
     <Compile Include="DBRespository\NormalLoanRepository.cs" />
     <Compile Include="DBRespository\OpenAccountRepository.cs" />
     <Compile Include="DBRespository\ProductCategoryRepository.cs" />
