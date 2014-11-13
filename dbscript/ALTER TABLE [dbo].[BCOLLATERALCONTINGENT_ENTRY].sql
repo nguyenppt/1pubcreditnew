@@ -1,0 +1,1 @@
+ALTER TABLE [dbo].[BCOLLATERALCONTINGENT_ENTRY] ADD CollateralType_Code nvarchar(20)
