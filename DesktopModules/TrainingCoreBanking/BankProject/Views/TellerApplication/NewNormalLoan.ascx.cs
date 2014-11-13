@@ -695,7 +695,7 @@ namespace BankProject.Views.TellerApplication
         private void LoadDataTolvLoanControl()
         {
             NewLoanControlRepository facade = new NewLoanControlRepository();
-            var db = facade.FindLoanControlByCode(tbNewNormalLoan.Text, int.Parse(hfRepaymentTimes.Value));
+            var db = facade.FindLoanControlByCodeAll(tbNewNormalLoan.Text, int.Parse(hfRepaymentTimes.Value));
             lvLoanControl.DataSource = db.ToList();
             lvLoanControl.DataBind();
         }
