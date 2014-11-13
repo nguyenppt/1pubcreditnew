@@ -816,8 +816,10 @@
                             <td>
                                 <asp:Label ID="DateLabel" runat="server" Text='<%# Eval("Date") %>' />
                             </td>
-                            <td style="text-align:right">
-                                <asp:Label ID="Label4" runat="server" Text='<%# Eval("AmountAction") %>' />
+                            <td>
+                                <telerik:radnumerictextbox id="AmountActionLabel" runat="server" readonly="true" borderwidth="0" value='<%# Bind("AmountAction") %>'>
+                                <EnabledStyle HorizontalAlign="Right" />
+                                </telerik:radnumerictextbox>
                             </td>
                             <td style="display:none" >
                                 <asp:Label ID="RateLabel" runat="server" Text='<%# Eval("Rate") %>' />
@@ -850,8 +852,10 @@
                                 <asp:Label ID="DateLabel" runat="server" Text='<%# Eval("Date") %>' />
                             </td>
              
-                            <td style="text-align:right">
-                                <asp:Label ID="Label4" runat="server" Text='<%# Eval("AmountAction") %>' />
+                            <td>
+                                <telerik:radnumerictextbox id="AmountActionLabel" runat="server" readonly="true" borderwidth="0" value='<%# Bind("AmountAction") %>'>
+                                <EnabledStyle HorizontalAlign="Right" />
+                                </telerik:radnumerictextbox>
                             </td>
                             <td style="display:none" >
                                 <asp:Label ID="RateLabel" runat="server" Text='<%# Eval("Rate") %>' />
