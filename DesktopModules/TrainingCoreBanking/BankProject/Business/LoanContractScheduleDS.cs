@@ -157,6 +157,14 @@ namespace BankProject.Business
             set { cl_isPaymentRow = value; }
         }
 
+        DataColumn cl_isDisbursalRow = new DataColumn("DisbursalRow", Type.GetType("System.Boolean"));
+
+        public DataColumn Cl_isDisbursalRow
+        {
+            get { return cl_isDisbursalRow; }
+            set { cl_isDisbursalRow = value; }
+        }
+
         DataColumn cl_durationDate = new DataColumn("duration_day");
 
         public DataColumn Cl_durationDate
@@ -187,6 +195,7 @@ namespace BankProject.Business
             dtItems.Columns.Add(cl_PrintOSPlan);
             dtItems.Columns.Add(cl_isPaymentRow);
             dtItems.Columns.Add(cl_isInterestedRow);
+            dtItems.Columns.Add(cl_isDisbursalRow);
             dtItems.Columns.Add(cl_durationDate);
             dtItems.Columns.Add(cl_DisbursalAmount);
 

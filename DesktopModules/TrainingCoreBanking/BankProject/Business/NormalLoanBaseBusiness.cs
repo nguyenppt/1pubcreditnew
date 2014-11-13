@@ -86,13 +86,9 @@ namespace BankProject.Business
 
 
                 princleSchedue.Period = (Int16)it["Perios"];
-
                 princleSchedue.DueDate = (DateTime)it["DueDate"];
-
                 princleSchedue.PrincipalAmount = (Decimal)it["Principle"];
-
                 princleSchedue.PrinOS = (Decimal)it["PrinOS"];
-
                 princleSchedue.InterestAmount = (Decimal)it["InterestAmount"];
                 princleSchedue.CreateBy = userID;
                 princleSchedue.CreateDate = facde.GetSystemDatetime();
@@ -167,6 +163,7 @@ namespace BankProject.Business
                     dr[ds.Cl_PrintOSPlan] = remainAmount;
                     dr[ds.Cl_isInterestedRow] = false;
                     dr[ds.Cl_isPaymentRow] = true;
+                    dr[ds.Cl_isDisbursalRow] = false;
                     dr[ds.Cl_PrintOs] = remainAmountActual;
                     dr[ds.Cl_interestAmount] = 0;
                     dr[ds.Cl_DisbursalAmount] = 0;
@@ -249,13 +246,15 @@ namespace BankProject.Business
                         dr = ds.DtItems.NewRow();
                         dr[ds.Cl_dueDate] = disbursalDrawdawnDate;
                         dr[ds.Cl_isInterestedRow] = false;
+                        dr[ds.Cl_isPaymentRow] = true; 
                         dr[ds.Cl_principle] = 0;
                         dr[ds.Cl_PrintOs] = 0;
                         ds.DtItems.Rows.Add(dr);
                     }
 
                     dr[ds.Cl_DisbursalAmount] = dis.DisbursalAmount;
-                    dr[ds.Cl_isPaymentRow] = true;
+                    dr[ds.Cl_isDisbursalRow] = true;
+
 
                 }
             }
@@ -375,20 +374,17 @@ namespace BankProject.Business
                 }
 
                 DataRow dr = findInstallmantRow(startInterestDate, ds);
-                if (dr != null)
-                {
-                    dr[ds.Cl_isInterestedRow.ColumnName] = true;
-                }
-                else
-                {
+                if (dr == null)
+                {                    
                     dr = ds.DtItems.NewRow();
                     dr[ds.Cl_dueDate.ColumnName] = startInterestDate;
-                    dr[ds.Cl_isInterestedRow.ColumnName] = true;
+                    dr[ds.Cl_isDisbursalRow.ColumnName] = false;
                     dr[ds.Cl_isPaymentRow.ColumnName] = false;
                     dr[ds.Cl_principle.ColumnName] = 0;
                     dr[ds.Cl_PrintOs.ColumnName] = 0;
                     ds.DtItems.Rows.Add(dr);
                 }
+                dr[ds.Cl_isInterestedRow.ColumnName] = true;
                 dr[ds.Cl_durationDate.ColumnName] = startInterestDate.Subtract(prevInterestDate).Days;
 
                 prevInterestDate = startInterestDate;
@@ -413,25 +409,37 @@ namespace BankProject.Business
 
             decimal interestAmount = 0;
             decimal currentAmount = getCurrentLoanAmount(normalLoanEntryM, replaymentTimes);
+
+            decimal amountTemp = 0;
+            prevInterestDate = drawdownDate;
+            int durationsDay = 0;
+
             for (int i = 0; i < ds.DtItems.Rows.Count; i++)
             {
                 DataRow dr = ds.DtItems.Rows[i];
+                durationsDay = ((DateTime)dr[ds.Cl_dueDate.ColumnName]).Subtract(prevInterestDate).Days;
+                interestAmount = durationsDay * ((interestedValue / 36000) * currentAmount);
+
                 if (dr[ds.Cl_isInterestedRow.ColumnName] != null && (bool)dr[ds.Cl_isInterestedRow.ColumnName])
                 {
                     if (dr[ds.Cl_isPaymentRow.ColumnName] != null && !(bool)dr[ds.Cl_isPaymentRow.ColumnName])
                     {
                         dr[ds.Cl_PrintOs.ColumnName] = currentAmount;
                     }
-                    interestAmount = int.Parse(dr[ds.Cl_durationDate.ColumnName].ToString()) * ((interestedValue / 36000) * currentAmount);
-                    dr[ds.Cl_interestAmount.ColumnName] = interestAmount;
+
+                    dr[ds.Cl_interestAmount.ColumnName] = interestAmount + amountTemp;
+                    amountTemp = 0;
                 }
                 else
                 {
+                    amountTemp += interestAmount;
                     dr[ds.Cl_interestAmount.ColumnName] = 0;
+                    
                 }
                 dr[ds.Cl_perious.ColumnName] = i + 1;
                 currentAmount = dr[ds.Cl_PrintOs.ColumnName] != null ? (decimal)dr[ds.Cl_PrintOs.ColumnName] : 0;
 
+                prevInterestDate = (DateTime)dr[ds.Cl_dueDate.ColumnName];
 
             }
 
