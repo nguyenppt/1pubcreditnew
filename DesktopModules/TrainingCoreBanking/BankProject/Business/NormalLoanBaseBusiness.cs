@@ -92,11 +92,15 @@ namespace BankProject.Business
                 princleSchedue.InterestAmount = (Decimal)it["InterestAmount"];
                 princleSchedue.CreateBy = userID;
                 princleSchedue.CreateDate = facde.GetSystemDatetime();
-                princleSchedue.PeriodRepaid = 0;
                 facde.Add(princleSchedue);
 
             }
             facde.Commit();
+
+            StoreProRepository storeFacase = new StoreProRepository();
+            storeFacase.StoreProcessor().B_Normal_Loan_Process_Payment_AmendAuthorizeProcess(dtInfor.Rows[0]["Code"].ToString(), replaymentTime);
+
+
         }
 
         private decimal getCurrentLoanAmount(BNEWNORMALLOAN normalLoanEntryM, int replaymentTimes)

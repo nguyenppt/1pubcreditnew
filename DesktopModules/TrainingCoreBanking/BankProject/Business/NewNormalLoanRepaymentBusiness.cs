@@ -65,10 +65,12 @@ namespace BankProject.Business
 
         public void authorizeProcess(int userID)
         {
+            int repaymenttimes = 0;
             if (Entity == null || String.IsNullOrEmpty(Entity.Code)) return;
             BNEWNORMALLOAN existLoan = facade.findExistingLoan(Entity.Code, null, null).FirstOrDefault();
             if (existLoan != null)
             {
+                repaymenttimes = Entity.RepaymentTimes;
                 Entity = existLoan;
                 Entity.Repaid_AuthorizedBy = userID;
                 Entity.Repaid_AuthorizedDate = facade.GetSystemDatetime();
@@ -88,6 +90,8 @@ namespace BankProject.Business
                     cashFacade.Commit();
                 }
 
+                StoreProRepository storeFacade = new StoreProRepository();
+                storeFacade.StoreProcessor().B_Normal_Loan_Process_Payment_ClearUnusedSchedule(Entity.Code, repaymenttimes);
             }
         }
     }
