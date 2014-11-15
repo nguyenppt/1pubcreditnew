@@ -54,6 +54,7 @@ BEGIN
 	IF(@PrinRepAcc IS NOT NULL AND @OverduePrincipleAmount IS NOT NULL)
 	BEGIN
 
+		
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @PrinRepAcc, @OverduePrincipleAmount
 		UPDATE [BNEWNORMALLOAN] SET [Tot_P_Pay_Amt] = ISNULL([Tot_P_Pay_Amt],0) + (@OverduePrincipleAmount - @RemainOver) WHERE Code = @ReferCode
 		UPDATE [B_LOAN_PROCESS_PAYMENT] SET	[OverdueCapitalAmount] = @RemainOver WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios

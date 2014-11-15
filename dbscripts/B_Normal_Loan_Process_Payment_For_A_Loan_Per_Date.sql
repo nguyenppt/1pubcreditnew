@@ -87,6 +87,13 @@ BEGIN
 			SELECT @OverduePrinciple = [OverdueCapitalAmount], @OverdueInterest = [OverdueInterestAmount], @PaidDueAmount = [PaidAmount], @PaidDueInterestAmount = [PaidInterestAmount]
 			FROM [B_LOAN_PROCESS_PAYMENT] WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [Period] = @Period AND [PeriodRepaid] = @RepaymentPerios
 
+			--Balance to loan account in case of overdue	
+			SELECT @OverduePrinciple = [OverdueCapitalAmount], @OverdueInterest = [OverdueInterestAmount], @PaidDueAmount = [PaidAmount]
+			FROM [B_LOAN_PROCESS_PAYMENT] WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios
+
+			EXEC [B_Normal_Loan_Process_Payment_Balance_Acc_Overdue] @ReferCode
+
+
 			UPDATE [B_LOAN_PROCESS_PAYMENT] SET	[Active_Flag] = 0 WHERE [Code] = @ReferCode AND [PeriodRepaid] = @RepaymentPerios;
 
 			IF(@PrinOSAmount >0)
@@ -101,7 +108,6 @@ BEGIN
 		END	
 	END
 	
-		
 	IF(EXISTS (SELECT 1 FROM [B_LOAN_PROCESS_PAYMENT] WHERE Code = @ReferCode AND [Period] = @Period AND [PeriodRepaid] = @RepaymentPerios AND ([Process_Date] IS NULL OR [Process_Date] < @ProcessDate)))
 	BEGIN
 					

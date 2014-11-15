@@ -29,9 +29,7 @@ AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-	
-END
+	SET NOCOUNT ON;		
 
 		----create new record to track payment process
 		INSERT INTO [dbo].[B_LOAN_PROCESS_PAYMENT]
@@ -53,5 +51,6 @@ END
 		FROM [BNEWNORMALLOAN] nl 
 		WHERE nl.[Code] = @ReferCode;
 
+END
 GO
 
