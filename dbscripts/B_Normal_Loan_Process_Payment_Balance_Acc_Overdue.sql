@@ -31,6 +31,7 @@ BEGIN
 	DECLARE @PrinRepAcc nvarchar(50)
 	DECLARE @IntRepAcc nvarchar(50)
 	DECLARE @ChrgRepAcc nvarchar(50)
+	DECLARE @CreditAcc nvarchar(50)
 	DECLARE @OverdueInterestAmount decimal(18,4)
 	DECLARE @OverduePrincipleAmount decimal(18,4)
 	DECLARE @PaidAmount decimal(18,4)
@@ -41,7 +42,27 @@ BEGIN
 
 	DECLARE @RemainOver decimal(18,4)
 
-	SELECT @PrinRepAcc = [PrinRepAccount] ,@IntRepAcc = [IntRepAccount] ,@ChrgRepAcc = [ChrgRepAccount], @RepaymentPerios = RepaymentTimes	FROM [BNEWNORMALLOAN] WHERE Code = @ReferCode
+	SELECT @PrinRepAcc = [PrinRepAccount] ,
+		@IntRepAcc = [IntRepAccount] ,
+		@ChrgRepAcc = [ChrgRepAccount], 
+		@CreditAcc = [CreditAccount],
+		@RepaymentPerios = RepaymentTimes
+	FROM [BNEWNORMALLOAN] WHERE Code = @ReferCode
+
+	IF(@IntRepAcc IS NULL)
+	BEGIN
+		SET @IntRepAcc = @CreditAcc
+	END 
+
+	IF(@PrinRepAcc IS NULL)
+	BEGIN
+		SET @PrinRepAcc = @CreditAcc
+	END 
+
+	IF(@ChrgRepAcc IS NULL)
+	BEGIN
+		SET @ChrgRepAcc = @CreditAcc
+	END
 
 	SELECT TOP 1  @OverdueInterestAmount = ISNULL([OverdueInterestAmount],0), 
 					@OverduePrincipleAmount = ISNULL([OverdueCapitalAmount],0), 
@@ -51,27 +72,30 @@ BEGIN
 	FROM [B_LOAN_PROCESS_PAYMENT] 
 	WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios
 
-	IF(@PrinRepAcc IS NOT NULL AND @OverduePrincipleAmount IS NOT NULL)
+	IF(@PrinRepAcc IS NOT NULL AND @OverduePrincipleAmount >0)
 	BEGIN		
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @PrinRepAcc, @OverduePrincipleAmount
+
 		UPDATE [BNEWNORMALLOAN] SET [Tot_P_Pay_Amt] = ISNULL([Tot_P_Pay_Amt],0) + (@OverduePrincipleAmount - @RemainOver) WHERE Code = @ReferCode
 		UPDATE [B_LOAN_PROCESS_PAYMENT] SET	[OverdueCapitalAmount] = @RemainOver  WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios
 		UPDATE [B_NORMALLOAN_PAYMENT_SCHEDULE] SET [OverdueCapitalAmount] = @RemainOver WHERE Code = @ReferCode AND [Period] = @Period AND [PeriodRepaid] = @RepaymentPerios
 			
 	END
 
-	IF(@IntRepAcc IS NOT NULL AND @OverdueInterestAmount IS NOT NULL)
+	IF(@IntRepAcc IS NOT NULL AND @OverdueInterestAmount >0)
 	BEGIN
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @IntRepAcc, @OverdueInterestAmount
+
 		UPDATE [BNEWNORMALLOAN] SET [Tot_I_Pay_Amt] = ISNULL([Tot_I_Pay_Amt],0) + (@OverdueInterestAmount - @RemainOver) WHERE Code = @ReferCode
 		UPDATE [B_LOAN_PROCESS_PAYMENT] SET	[OverdueInterestAmount] =  @RemainOver 	WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios
 		UPDATE [B_NORMALLOAN_PAYMENT_SCHEDULE] SET [OverdueInterestAmount] = @RemainOver WHERE Code = @ReferCode AND [Period] = @Period AND [PeriodRepaid] = @RepaymentPerios
 		
 	END
 
-	IF(@ChrgRepAcc IS NOT NULL AND @PaidAmount IS NOT NULL)
+	IF(@ChrgRepAcc IS NOT NULL AND @PaidAmount >0)
 	BEGIN
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @ChrgRepAcc, @PaidAmount
+
 		UPDATE [BNEWNORMALLOAN] SET [Tot_P_Pastdue_Amt] = ISNULL([Tot_P_Pastdue_Amt],0) + (@PaidAmount - @RemainOver)  WHERE Code = @ReferCode
 		UPDATE [B_LOAN_PROCESS_PAYMENT] SET [PaidAmount] =  @RemainOver WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios
 		UPDATE [B_NORMALLOAN_PAYMENT_SCHEDULE] SET 	[PaidAmount] = @RemainOver WHERE Code = @ReferCode AND [Period] = @Period AND [PeriodRepaid] = @RepaymentPerios
