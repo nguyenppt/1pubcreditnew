@@ -425,14 +425,16 @@ namespace BankProject.Business
                 DataRow dr = ds.DtItems.Rows[i];
                 durationsDay = ((DateTime)dr[ds.Cl_dueDate.ColumnName]).Subtract(prevInterestDate).Days;
                 interestAmount = durationsDay * ((interestedValue / 36000) * currentAmount);
+                dr[ds.Cl_durationDate.ColumnName] = durationsDay;
 
+                if (dr[ds.Cl_isPaymentRow.ColumnName] != null && !(bool)dr[ds.Cl_isPaymentRow.ColumnName])
+                {
+                    dr[ds.Cl_PrintOs.ColumnName] = currentAmount;
+                }
+                
                 if (dr[ds.Cl_isInterestedRow.ColumnName] != null && (bool)dr[ds.Cl_isInterestedRow.ColumnName])
                 {
-                    if (dr[ds.Cl_isPaymentRow.ColumnName] != null && !(bool)dr[ds.Cl_isPaymentRow.ColumnName])
-                    {
-                        dr[ds.Cl_PrintOs.ColumnName] = currentAmount;
-                    }
-
+                   
                     dr[ds.Cl_interestAmount.ColumnName] = interestAmount + amountTemp;
                     amountTemp = 0;
                 }
@@ -442,6 +444,7 @@ namespace BankProject.Business
                     dr[ds.Cl_interestAmount.ColumnName] = 0;
                     
                 }
+
                 dr[ds.Cl_perious.ColumnName] = i + 1;
                 currentAmount = dr[ds.Cl_PrintOs.ColumnName] != null ? (decimal)dr[ds.Cl_PrintOs.ColumnName] : 0;
 
