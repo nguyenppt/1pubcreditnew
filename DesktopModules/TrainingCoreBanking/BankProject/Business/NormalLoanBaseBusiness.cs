@@ -117,9 +117,6 @@ namespace BankProject.Business
             }
         }
 
-
-
-
         private void PaymentProcess(ref LoanContractScheduleDS ds, BNEWNORMALLOAN normalLoanEntryM, int replaymentTimes)
         {
             int rateType = 1; //default is Fix A/ Periodic --> Du no giam dan. (fix B is du no ban dau)
@@ -166,6 +163,7 @@ namespace BankProject.Business
                     dr[ds.Cl_principle] = instalmant;
                     dr[ds.Cl_PrintOSPlan] = remainAmount;
                     dr[ds.Cl_isInterestedRow] = false;
+                    dr[ds.Cl_isPeriodicAutomaticRow] = false;
                     dr[ds.Cl_isPaymentRow] = true;
                     dr[ds.Cl_isDisbursalRow] = false;
                     dr[ds.Cl_PrintOs] = remainAmountActual;
@@ -189,6 +187,8 @@ namespace BankProject.Business
                 dr[ds.Cl_principle] = instalmantEnd;
                 dr[ds.Cl_PrintOSPlan] = remainAmount;
                 dr[ds.Cl_isInterestedRow] = false;
+                dr[ds.Cl_isDisbursalRow] = false;
+                dr[ds.Cl_isPeriodicAutomaticRow] = false;
                 dr[ds.Cl_isPaymentRow] = true;
                 dr[ds.Cl_PrintOs] = remainAmountActual;
                 dr[ds.Cl_interestAmount] = 0;
@@ -220,6 +220,8 @@ namespace BankProject.Business
                 dr[ds.Cl_PrintOSPlan] = 0;
                 dr[ds.Cl_PrintOs] = remainAmountActual - instalmant;
                 dr[ds.Cl_isInterestedRow] = false;
+                dr[ds.Cl_isPeriodicAutomaticRow] = false;
+                dr[ds.Cl_isDisbursalRow] = false;
                 dr[ds.Cl_isPaymentRow] = true;
                 dr[ds.Cl_DisbursalAmount] = 0;
                 ds.DtItems.Rows.Add(dr);
@@ -250,6 +252,7 @@ namespace BankProject.Business
                         dr = ds.DtItems.NewRow();
                         dr[ds.Cl_dueDate] = disbursalDrawdawnDate;
                         dr[ds.Cl_isInterestedRow] = false;
+                        dr[ds.Cl_isPeriodicAutomaticRow] = false;
                         dr[ds.Cl_isPaymentRow] = true; 
                         dr[ds.Cl_principle] = 0;
                         dr[ds.Cl_PrintOs] = 0;
@@ -328,6 +331,7 @@ namespace BankProject.Business
             {
                 interestedValue = (normalLoanEntryM.InterestRate == null ? 0 : (decimal)normalLoanEntryM.InterestRate)
                     + (String.IsNullOrEmpty(normalLoanEntryM.IntSpread) ? 0 : Decimal.Parse(normalLoanEntryM.IntSpread));
+                //PeriodicProcess(ref ds, normalLoanEntryM, drawdownDate, replaymentTimes);
             }
             else // interest = interestedRate
             {
@@ -363,7 +367,6 @@ namespace BankProject.Business
             {
                 if (i == perios - 1)
                 {
-
                     it = facade.FindLoanControl(normalLoanEntryM.Code, replaymentTimes, "EP").FirstOrDefault();
                     if (it != null)
                     {
@@ -373,8 +376,6 @@ namespace BankProject.Business
                     {
                         startInterestDate = (DateTime)normalLoanEntryM.MaturityDate;
                     }
-
-
                 }
 
                 DataRow dr = findInstallmantRow(startInterestDate, ds);
@@ -384,6 +385,7 @@ namespace BankProject.Business
                     dr[ds.Cl_dueDate.ColumnName] = startInterestDate;
                     dr[ds.Cl_isDisbursalRow.ColumnName] = false;
                     dr[ds.Cl_isPaymentRow.ColumnName] = false;
+                    dr[ds.Cl_isPeriodicAutomaticRow] = false;
                     dr[ds.Cl_principle.ColumnName] = 0;
                     dr[ds.Cl_PrintOs.ColumnName] = 0;
                     ds.DtItems.Rows.Add(dr);
@@ -447,6 +449,54 @@ namespace BankProject.Business
 
             }
 
+        }
+
+        private void PeriodicProcess(ref LoanContractScheduleDS ds, BNEWNORMALLOAN normalLoanEntryM, DateTime startDrawdownDate, int replaymentTimes)
+        {
+            if (normalLoanEntryM == null || String.IsNullOrEmpty(normalLoanEntryM.Code) )
+            {
+                return;
+            }
+            int rateType = 1; //default is Fix A/ Periodic --> Du no giam dan. (fix B is du no ban dau)
+            rateType = String.IsNullOrEmpty(normalLoanEntryM.RateType) ? 1 : int.Parse(normalLoanEntryM.RateType);
+
+            if (rateType != 3) //peridodic case
+            {
+                return;
+            }
+            //NewLoanControlRepository facade = new NewLoanControlRepository();
+            //BNewLoanControl it = facade.FindLoanControl(normalLoanEntryM.Code, replaymentTimes, "AC").FirstOrDefault();
+
+            if (String.IsNullOrEmpty(normalLoanEntryM.InterestKey))
+            {
+                return;
+            }
+
+            NewLoanInterestedKeyRepository facade = new NewLoanInterestedKeyRepository();
+            BLOANINTEREST_KEY interestKey = facade.GetById(Int16.Parse(normalLoanEntryM.InterestKey));
+
+            if (interestKey != null)
+            {
+                DateTime newrateDate = startDrawdownDate.AddMonths((int)(interestKey.MonthLoanRateNo + 1));
+                DataRow dr = findInstallmantRow(newrateDate, ds);
+                if (dr == null)
+                {
+                    dr = ds.DtItems.NewRow();
+                    dr[ds.Cl_dueDate.ColumnName] = newrateDate;
+                    dr[ds.Cl_isDisbursalRow.ColumnName] = false;
+                    dr[ds.Cl_isPaymentRow.ColumnName] = false;
+                    dr[ds.Cl_isPeriodicAutomaticRow] = true;
+                    dr[ds.Cl_isInterestedRow.ColumnName] = false;
+                    dr[ds.Cl_principle.ColumnName] = 0;
+                    dr[ds.Cl_PrintOs.ColumnName] = 0;
+                    ds.DtItems.Rows.Add(dr);
+                }
+                else
+                {
+                    dr[ds.Cl_isPeriodicAutomaticRow] = true;
+                }
+                
+            }
 
 
         }
@@ -553,7 +603,6 @@ namespace BankProject.Business
 
 
         }
-
 
         protected void updateNormalLoanRepayment(BNEWNORMALLOAN loan, int repaymentTimes, decimal newAmount, DateTime? activateDate)
         {
