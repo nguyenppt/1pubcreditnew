@@ -146,7 +146,7 @@ namespace BankProject.Business
             }
             remainAmount = getCurrentLoanAmount(normalLoanEntryM, replaymentTimes);
 
-            if (rateType == 1)//du no giam dan
+            if (rateType != 2)//du no giam dan
             {
 
                 getPaymentInputControl(ref periosDate, ref endDate, ref numberOfPerios, ref instalmant, ref instalmantEnd, ref fregV, normalLoanEntryM, replaymentTimes);
@@ -325,13 +325,14 @@ namespace BankProject.Business
             int interestDay = 0;
             int perios = 0;
             decimal interestedValue = 0;
+            decimal interestedValue2 = 0;
 
             rateType = String.IsNullOrEmpty(normalLoanEntryM.RateType) ? "1" : normalLoanEntryM.RateType;
             if (rateType.Equals("3"))//periodic interest = interestedRate + int speed
             {
                 interestedValue = (normalLoanEntryM.InterestRate == null ? 0 : (decimal)normalLoanEntryM.InterestRate)
                     + (String.IsNullOrEmpty(normalLoanEntryM.IntSpread) ? 0 : Decimal.Parse(normalLoanEntryM.IntSpread));
-                //PeriodicProcess(ref ds, normalLoanEntryM, drawdownDate, replaymentTimes);
+                //PeriodicProcess(ref ds, normalLoanEntryM, drawdownDate, replaymentTimes, ref interestedValue2);
             }
             else // interest = interestedRate
             {
@@ -420,10 +421,27 @@ namespace BankProject.Business
             prevInterestDate = drawdownDate;
             int durationsDay = 0;
 
+            int periousIndex = 0;
+            DataRow removeRow = null;
             for (int i = 0; i < ds.DtItems.Rows.Count; i++)
             {
                 DataRow dr = ds.DtItems.Rows[i];
                 durationsDay = ((DateTime)dr[ds.Cl_dueDate.ColumnName]).Subtract(prevInterestDate).Days;
+
+                if ((dr[ds.Cl_isInterestedRow.ColumnName] != null && !(bool)dr[ds.Cl_isInterestedRow.ColumnName])
+                    && (dr[ds.Cl_isPaymentRow.ColumnName] != null && !(bool)dr[ds.Cl_isPaymentRow.ColumnName])
+                    && (dr[ds.Cl_isDisbursalRow.ColumnName] != null && !(bool)dr[ds.Cl_isDisbursalRow.ColumnName])
+                    && (dr[ds.Cl_isPeriodicAutomaticRow.ColumnName] != null && (bool)dr[ds.Cl_isPeriodicAutomaticRow.ColumnName]))
+                {
+                    interestedValue = interestedValue2;
+                    removeRow = dr;
+                }
+                else
+                {
+                    periousIndex++;
+                    dr[ds.Cl_perious.ColumnName] = periousIndex;
+                }
+
                 interestAmount = durationsDay * ((interestedValue / 36000) * currentAmount);
                 dr[ds.Cl_durationDate.ColumnName] = durationsDay;
 
@@ -445,16 +463,21 @@ namespace BankProject.Business
                     
                 }
 
-                dr[ds.Cl_perious.ColumnName] = i + 1;
+                
                 currentAmount = dr[ds.Cl_PrintOs.ColumnName] != null ? (decimal)dr[ds.Cl_PrintOs.ColumnName] : 0;
 
-                prevInterestDate = (DateTime)dr[ds.Cl_dueDate.ColumnName];
+                prevInterestDate = (DateTime)dr[ds.Cl_dueDate.ColumnName];         
+                
 
             }
 
+            if (removeRow != null)
+            {
+                ds.DtItems.Rows.Remove(removeRow);
+            }
         }
 
-        private void PeriodicProcess(ref LoanContractScheduleDS ds, BNEWNORMALLOAN normalLoanEntryM, DateTime startDrawdownDate, int replaymentTimes)
+        private void PeriodicProcess(ref LoanContractScheduleDS ds, BNEWNORMALLOAN normalLoanEntryM, DateTime startDrawdownDate, int replaymentTimes, ref decimal newInterestKey)
         {
             if (normalLoanEntryM == null || String.IsNullOrEmpty(normalLoanEntryM.Code) )
             {
@@ -480,6 +503,23 @@ namespace BankProject.Business
 
             if (interestKey != null)
             {
+                if(normalLoanEntryM.Currency.Equals("VND")){
+                    newInterestKey = (interestKey.VND_InterestRate == null ? 0 : (decimal)interestKey.VND_InterestRate)
+                    + (String.IsNullOrEmpty(normalLoanEntryM.IntSpread) ? 0 : Decimal.Parse(normalLoanEntryM.IntSpread));
+                }
+                else if (normalLoanEntryM.Currency.Equals("USD"))
+                {
+                    newInterestKey = (interestKey.USD_InterestRate == null ? 0 : (decimal)interestKey.USD_InterestRate)
+                    + (String.IsNullOrEmpty(normalLoanEntryM.IntSpread) ? 0 : Decimal.Parse(normalLoanEntryM.IntSpread));
+                }
+                else
+                {
+                    newInterestKey = (normalLoanEntryM.InterestRate == null ? 0 : (decimal)normalLoanEntryM.InterestRate)
+                   + (String.IsNullOrEmpty(normalLoanEntryM.IntSpread) ? 0 : Decimal.Parse(normalLoanEntryM.IntSpread));
+                }
+
+
+
                 DateTime newrateDate = startDrawdownDate.AddMonths((int)(interestKey.MonthLoanRateNo + 1));
                 DataRow dr = findInstallmantRow(newrateDate, ds);
                 if (dr == null)
