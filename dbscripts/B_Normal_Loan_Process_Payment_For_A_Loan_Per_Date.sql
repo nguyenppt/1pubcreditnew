@@ -59,6 +59,8 @@ BEGIN
 	FROM [B_NORMALLOAN_PAYMENT_SCHEDULE] 
 	WHERE [DueDate] >= @ProcessDate AND Code = @ReferCode AND [PeriodRepaid] = @RepaymentPerios ORDER BY Period ASC
 
+	EXEC @Interest = [B_Normal_Loan_Process_Payment_Get_Interested_Rate] @ReferCode, @Interest, @ProcessDate
+
 	IF(@DueDate = @ProcessDate) --end of perios
 	BEGIN
 		--Select '@DueDate = @ProcessDate', @ReferCode, @ProcessDate, @Period
