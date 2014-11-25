@@ -253,7 +253,7 @@ namespace BankProject.Business
                         dr[ds.Cl_dueDate] = disbursalDrawdawnDate;
                         dr[ds.Cl_isInterestedRow] = false;
                         dr[ds.Cl_isPeriodicAutomaticRow] = false;
-                        dr[ds.Cl_isPaymentRow] = true; 
+                        dr[ds.Cl_isPaymentRow] = true;
                         dr[ds.Cl_principle] = 0;
                         dr[ds.Cl_PrintOs] = 0;
                         ds.DtItems.Rows.Add(dr);
@@ -332,7 +332,7 @@ namespace BankProject.Business
             {
                 interestedValue = (normalLoanEntryM.InterestRate == null ? 0 : (decimal)normalLoanEntryM.InterestRate)
                     + (String.IsNullOrEmpty(normalLoanEntryM.IntSpread) ? 0 : Decimal.Parse(normalLoanEntryM.IntSpread));
-                //PeriodicProcess(ref ds, normalLoanEntryM, drawdownDate, replaymentTimes, ref interestedValue2);
+                PeriodicProcess(ref ds, normalLoanEntryM, drawdownDate, replaymentTimes, ref interestedValue2);
             }
             else // interest = interestedRate
             {
@@ -381,7 +381,7 @@ namespace BankProject.Business
 
                 DataRow dr = findInstallmantRow(startInterestDate, ds);
                 if (dr == null)
-                {                    
+                {
                     dr = ds.DtItems.NewRow();
                     dr[ds.Cl_dueDate.ColumnName] = startInterestDate;
                     dr[ds.Cl_isDisbursalRow.ColumnName] = false;
@@ -449,10 +449,10 @@ namespace BankProject.Business
                 {
                     dr[ds.Cl_PrintOs.ColumnName] = currentAmount;
                 }
-                
+
                 if (dr[ds.Cl_isInterestedRow.ColumnName] != null && (bool)dr[ds.Cl_isInterestedRow.ColumnName])
                 {
-                   
+
                     dr[ds.Cl_interestAmount.ColumnName] = interestAmount + amountTemp;
                     amountTemp = 0;
                 }
@@ -460,14 +460,14 @@ namespace BankProject.Business
                 {
                     amountTemp += interestAmount;
                     dr[ds.Cl_interestAmount.ColumnName] = 0;
-                    
+
                 }
 
-                
+
                 currentAmount = dr[ds.Cl_PrintOs.ColumnName] != null ? (decimal)dr[ds.Cl_PrintOs.ColumnName] : 0;
 
-                prevInterestDate = (DateTime)dr[ds.Cl_dueDate.ColumnName];         
-                
+                prevInterestDate = (DateTime)dr[ds.Cl_dueDate.ColumnName];
+
 
             }
 
@@ -479,7 +479,7 @@ namespace BankProject.Business
 
         private void PeriodicProcess(ref LoanContractScheduleDS ds, BNEWNORMALLOAN normalLoanEntryM, DateTime startDrawdownDate, int replaymentTimes, ref decimal newInterestKey)
         {
-            if (normalLoanEntryM == null || String.IsNullOrEmpty(normalLoanEntryM.Code) )
+            if (normalLoanEntryM == null || String.IsNullOrEmpty(normalLoanEntryM.Code))
             {
                 return;
             }
@@ -490,20 +490,30 @@ namespace BankProject.Business
             {
                 return;
             }
-            //NewLoanControlRepository facade = new NewLoanControlRepository();
-            //BNewLoanControl it = facade.FindLoanControl(normalLoanEntryM.Code, replaymentTimes, "AC").FirstOrDefault();
+            NewLoanControlRepository facadeL = new NewLoanControlRepository();
+            BNewLoanControl it = facadeL.FindLoanControl(normalLoanEntryM.Code, replaymentTimes, "AC").FirstOrDefault();
+            NewLoanInterestedKeyRepository facade = new NewLoanInterestedKeyRepository();
+            BLOANINTEREST_KEY interestKey = null;
 
-            if (String.IsNullOrEmpty(normalLoanEntryM.InterestKey))
+            if (it != null && !String.IsNullOrEmpty(it.Freq))
             {
-                return;
+                interestKey = facade.GetInterestKey(int.Parse(it.Freq)).FirstOrDefault();
+            }
+            else
+            {
+                if (String.IsNullOrEmpty(normalLoanEntryM.InterestKey))
+                {
+                    return;
+                }
+                interestKey = facade.GetInterestKey(int.Parse(normalLoanEntryM.InterestKey)).FirstOrDefault();
             }
 
-            NewLoanInterestedKeyRepository facade = new NewLoanInterestedKeyRepository();
-            BLOANINTEREST_KEY interestKey = facade.GetById(Int16.Parse(normalLoanEntryM.InterestKey));
+
 
             if (interestKey != null)
             {
-                if(normalLoanEntryM.Currency.Equals("VND")){
+                if (normalLoanEntryM.Currency.Equals("VND"))
+                {
                     newInterestKey = (interestKey.VND_InterestRate == null ? 0 : (decimal)interestKey.VND_InterestRate)
                     + (String.IsNullOrEmpty(normalLoanEntryM.IntSpread) ? 0 : Decimal.Parse(normalLoanEntryM.IntSpread));
                 }
@@ -538,7 +548,7 @@ namespace BankProject.Business
                 {
                     dr[ds.Cl_isPeriodicAutomaticRow] = true;
                 }
-                
+
             }
 
 
@@ -615,7 +625,7 @@ namespace BankProject.Business
                 if (numberOfPerios > 0)
                 {
 
-                    instalmant = (Int32)((getCurrentLoanAmount(normalLoanEntryM,replaymentTimes)) / numberOfPerios);
+                    instalmant = (Int32)((getCurrentLoanAmount(normalLoanEntryM, replaymentTimes)) / numberOfPerios);
 
                 }
 
