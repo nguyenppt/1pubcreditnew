@@ -428,19 +428,7 @@ namespace BankProject.Business
                 DataRow dr = ds.DtItems.Rows[i];
                 durationsDay = ((DateTime)dr[ds.Cl_dueDate.ColumnName]).Subtract(prevInterestDate).Days;
 
-                if ((dr[ds.Cl_isInterestedRow.ColumnName] != null && !(bool)dr[ds.Cl_isInterestedRow.ColumnName])
-                    && (dr[ds.Cl_isPaymentRow.ColumnName] != null && !(bool)dr[ds.Cl_isPaymentRow.ColumnName])
-                    && (dr[ds.Cl_isDisbursalRow.ColumnName] != null && !(bool)dr[ds.Cl_isDisbursalRow.ColumnName])
-                    && (dr[ds.Cl_isPeriodicAutomaticRow.ColumnName] != null && (bool)dr[ds.Cl_isPeriodicAutomaticRow.ColumnName]))
-                {
-                    interestedValue = interestedValue2;
-                    removeRow = dr;
-                }
-                else
-                {
-                    periousIndex++;
-                    dr[ds.Cl_perious.ColumnName] = periousIndex;
-                }
+                
 
                 interestAmount = durationsDay * ((interestedValue / 36000) * currentAmount);
                 dr[ds.Cl_durationDate.ColumnName] = durationsDay;
@@ -463,6 +451,24 @@ namespace BankProject.Business
 
                 }
 
+                if (dr[ds.Cl_isPeriodicAutomaticRow.ColumnName] != null && (bool)dr[ds.Cl_isPeriodicAutomaticRow.ColumnName])
+                {
+                    interestedValue = interestedValue2;
+                }
+
+                if ((dr[ds.Cl_isInterestedRow.ColumnName] != null && !(bool)dr[ds.Cl_isInterestedRow.ColumnName])
+                    && (dr[ds.Cl_isPaymentRow.ColumnName] != null && !(bool)dr[ds.Cl_isPaymentRow.ColumnName])
+                    && (dr[ds.Cl_isDisbursalRow.ColumnName] != null && !(bool)dr[ds.Cl_isDisbursalRow.ColumnName])
+                    && (dr[ds.Cl_isPeriodicAutomaticRow.ColumnName] != null && (bool)dr[ds.Cl_isPeriodicAutomaticRow.ColumnName]))
+                {
+                    
+                    removeRow = dr;
+                }
+                else
+                {
+                    periousIndex++;
+                    dr[ds.Cl_perious.ColumnName] = periousIndex;
+                }
 
                 currentAmount = dr[ds.Cl_PrintOs.ColumnName] != null ? (decimal)dr[ds.Cl_PrintOs.ColumnName] : 0;
 
@@ -530,7 +536,7 @@ namespace BankProject.Business
 
 
 
-                DateTime newrateDate = startDrawdownDate.AddMonths((int)(interestKey.MonthLoanRateNo + 1));
+                DateTime newrateDate = startDrawdownDate.AddMonths((int)(interestKey.MonthLoanRateNo));
                 DataRow dr = findInstallmantRow(newrateDate, ds);
                 if (dr == null)
                 {
