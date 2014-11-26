@@ -180,8 +180,10 @@ namespace BankProject.Business
                     }
                 }
 
-                remainAmount = remainAmount - instalmant;
-                remainAmountActual = remainAmountActual - instalmant;
+                //remainAmount = remainAmount - instalmant;
+                //remainAmountActual = remainAmountActual - instalmant;
+                remainAmount = remainAmount - instalmantEnd;
+                remainAmountActual = remainAmountActual - instalmantEnd;
                 dr = ds.DtItems.NewRow();
                 dr[ds.Cl_dueDate] = endDate;
                 dr[ds.Cl_principle] = instalmantEnd;
