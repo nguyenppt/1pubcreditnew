@@ -554,7 +554,7 @@ namespace BankProject.Business
                 }
                 else
                 {
-                    dr[ds.Cl_isPeriodicAutomaticRow] = true;
+                    dr[ds.Cl_isPeriodicAutomaticRow.ColumnName] = true;
                 }
 
             }
