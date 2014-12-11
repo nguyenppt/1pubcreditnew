@@ -18,6 +18,10 @@ namespace BankProject
             {
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "Remove", "DisableGlobleID2();", true);
             }
+            else
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Add", "EnableGlobleID2();", true);
+            }
             if (IsPostBack) return;
             FirstLoad();
             rcbCollateralType.Focus();
@@ -207,6 +211,15 @@ namespace BankProject
                     //////////////////////
                     BankProject.Controls.Commont.SetTatusFormControls(this.Controls, false);
                     LoadToolBar(false);
+                    if (rcbGlobalLimitID2.SelectedValue == "")
+                    {
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "Remove", "DisableGlobleID2();", true);
+                    }
+                    else
+                    {
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "Add", "EnableGlobleID2();", true);
+                    }
+
                     return;
                 }
                 var CustomerID = CollIndoID.Substring(0, 7);
@@ -227,17 +240,23 @@ namespace BankProject
                         tbDateOfIssue.Text = (Convert.ToDateTime(dr["DocIssueDate"].ToString())).ToShortDateString();
                     }
                     tbReferenceNo.Text = tbCollInfoID.Text;
+
+                    if (rcbGlobalLimitID2.SelectedValue == "")
+                    {
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "Remove", "DisableGlobleID2();", true);
+                    }
+                    else
+                    {
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "Add", "EnableGlobleID2();", true);
+                    }
+
                 }
                 else
                 { ShowMsgBox("Your Customer ID has not been Created, You'd create it first !"); return; }
             }
             else { ShowMsgBox("Collateral Information ID is Incorrect Format. Please check again ! "); return; }
 
-            if (rcbGlobalLimitID2.SelectedValue == "")
-            {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "Remove", "DisableGlobleID2();", true);
-            }
-
+            
         }
         #region Properties
         private void LoadToolBar(bool isauthorize)
