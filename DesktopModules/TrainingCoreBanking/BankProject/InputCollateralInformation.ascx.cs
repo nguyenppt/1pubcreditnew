@@ -14,6 +14,10 @@ namespace BankProject
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (rcbGlobalLimitID2.SelectedValue == "")
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Remove", "DisableGlobleID2();", true);
+            }
             if (IsPostBack) return;
             FirstLoad();
             rcbCollateralType.Focus();
@@ -26,7 +30,7 @@ namespace BankProject
             {
                 LoadToolBar(true);
             }
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "Remove", "DisableGlobleID2();", true);
+            
         }
 
         protected void FirstLoad()
@@ -72,11 +76,24 @@ namespace BankProject
                         Convert.ToDecimal( tbExeValue.Value.HasValue? tbExeValue.Value:0),
                         AllocatedAmt, rdpValueDate.SelectedDate, rdpExpiryDate.SelectedDate, rdpReviewDate.SelectedDate, UserInfo.Username.ToString(), Rate,
                         rcbGlobalLimitID2.SelectedValue);
-                    TriTT.B_CONTINGENT_ENTRY_Insert_Update(CollInfoID, tbContingentEntryID.Text, tbCustomerIDName_Cont.Text.Substring(0, 7), tbAddress_cont.Text, tbIDTaxCode.Text
-                        , tbDateOfIssue.Text == "" ? "" : tbDateOfIssue.Text, rcbTransactionCode.SelectedValue, rcbTransactionCode.Text.Replace(rcbTransactionCode.SelectedValue + " - ", "")
-                        , rcbDebitOrCredit.SelectedValue, rcbDebitOrCredit.Text.Replace(rcbDebitOrCredit.SelectedValue + " - ", ""), rcbCurrency.SelectedValue,
-                        rcbAccountNo.SelectedValue, rcbAccountNo.Text, Convert.ToDecimal(tbAmount.Value), Convert.ToDecimal(tbDealRate.Value), rdpValueDate.SelectedDate, tbNarrative.Text
-                        , UserInfo.Username.ToString());
+                    TriTT.B_CONTINGENT_ENTRY_Insert_Update(
+                        CollInfoID, 
+                        tbContingentEntryID.Text, 
+                        tbCustomerIDName_Cont.Text.Substring(0, 7), 
+                        tbAddress_cont.Text, tbIDTaxCode.Text
+                        , tbDateOfIssue.Text == "" ? "" : tbDateOfIssue.Text
+                        , rcbTransactionCode.SelectedValue
+                        , rcbTransactionCode.Text.Replace(rcbTransactionCode.SelectedValue + " - ", "")
+                        , rcbDebitOrCredit.SelectedValue
+                        , rcbDebitOrCredit.Text.Replace(rcbDebitOrCredit.SelectedValue + " - ", "")
+                        , rcbCurrency.SelectedValue,
+                        rcbAccountNo.SelectedValue
+                        , rcbAccountNo.Text, Convert.ToDecimal(tbAmount.Value)
+                        , Convert.ToDecimal(tbDealRate.Value)
+                        , rdpValueDate.SelectedDate
+                        , tbNarrative.Text
+                        , UserInfo.Username.ToString()
+                        , rcbCollateralType.SelectedValue);
                     Response.Redirect("Default.aspx?tabid=194");
                 }
                 else
@@ -215,6 +232,12 @@ namespace BankProject
                 { ShowMsgBox("Your Customer ID has not been Created, You'd create it first !"); return; }
             }
             else { ShowMsgBox("Collateral Information ID is Incorrect Format. Please check again ! "); return; }
+
+            if (rcbGlobalLimitID2.SelectedValue == "")
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Remove", "DisableGlobleID2();", true);
+            }
+
         }
         #region Properties
         private void LoadToolBar(bool isauthorize)
@@ -417,6 +440,7 @@ namespace BankProject
 
         protected void btRemoveGlobalLimitID_Click(object sender, ImageClickEventArgs e)
         {
+            rcbGlobalLimitID2.SelectedValue = "";
             Page.ClientScript.RegisterStartupScript(this.GetType(), "Remove", "DisableGlobleID2();", true);
         }
         
