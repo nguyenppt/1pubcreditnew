@@ -49,17 +49,17 @@ BEGIN
 		@RepaymentPerios = RepaymentTimes
 	FROM [BNEWNORMALLOAN] WHERE Code = @ReferCode
 
-	IF(@IntRepAcc IS NULL)
+	IF(@IntRepAcc IS NULL OR @IntRepAcc = '')
 	BEGIN
 		SET @IntRepAcc = @CreditAcc
 	END 
 
-	IF(@PrinRepAcc IS NULL)
+	IF(@PrinRepAcc IS NULL OR @PrinRepAcc = '')
 	BEGIN
 		SET @PrinRepAcc = @CreditAcc
 	END 
 
-	IF(@ChrgRepAcc IS NULL)
+	IF(@ChrgRepAcc IS NULL OR @ChrgRepAcc = '')
 	BEGIN
 		SET @ChrgRepAcc = @CreditAcc
 	END 
@@ -75,6 +75,7 @@ BEGIN
 	IF(@PrinRepAcc IS NOT NULL AND @PrincipleAmount > 0)
 	BEGIN
 
+		EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @PrinRepAcc, @PrincipleAmount, 4
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @PrinRepAcc, @PrincipleAmount
 		UPDATE [BNEWNORMALLOAN] SET [Tot_P_Pay_Amt] = ISNULL([Tot_P_Pay_Amt],0) + (@PrincipleAmount - @RemainOver) WHERE Code = @ReferCode
 
@@ -90,6 +91,7 @@ BEGIN
 
 	IF(@IntRepAcc IS NOT NULL AND @InterestAmount >0)
 	BEGIN
+		EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @IntRepAcc, @InterestAmount, 5
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @IntRepAcc, @InterestAmount
 		UPDATE [BNEWNORMALLOAN] SET [Tot_I_Pay_Amt] = ISNULL([Tot_I_Pay_Amt],0) + (@InterestAmount - @RemainOver) WHERE Code = @ReferCode
 

@@ -49,17 +49,17 @@ BEGIN
 		@RepaymentPerios = RepaymentTimes
 	FROM [BNEWNORMALLOAN] WHERE Code = @ReferCode
 
-	IF(@IntRepAcc IS NULL)
+	IF(@IntRepAcc IS NULL OR @IntRepAcc = '')
 	BEGIN
 		SET @IntRepAcc = @CreditAcc
 	END 
 
-	IF(@PrinRepAcc IS NULL)
+	IF(@PrinRepAcc IS NULL OR @PrinRepAcc = '')
 	BEGIN
 		SET @PrinRepAcc = @CreditAcc
 	END 
 
-	IF(@ChrgRepAcc IS NULL)
+	IF(@ChrgRepAcc IS NULL OR @ChrgRepAcc = '')
 	BEGIN
 		SET @ChrgRepAcc = @CreditAcc
 	END
@@ -73,7 +73,8 @@ BEGIN
 	WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios
 
 	IF(@PrinRepAcc IS NOT NULL AND @OverduePrincipleAmount >0)
-	BEGIN		
+	BEGIN
+		EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @PrinRepAcc, @OverduePrincipleAmount, 4		
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @PrinRepAcc, @OverduePrincipleAmount
 
 		UPDATE [BNEWNORMALLOAN] SET [Tot_P_Pay_Amt] = ISNULL([Tot_P_Pay_Amt],0) + (@OverduePrincipleAmount - @RemainOver) WHERE Code = @ReferCode
@@ -84,6 +85,7 @@ BEGIN
 
 	IF(@IntRepAcc IS NOT NULL AND @OverdueInterestAmount >0)
 	BEGIN
+		EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @IntRepAcc, @OverdueInterestAmount, 5	
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @IntRepAcc, @OverdueInterestAmount
 
 		UPDATE [BNEWNORMALLOAN] SET [Tot_I_Pay_Amt] = ISNULL([Tot_I_Pay_Amt],0) + (@OverdueInterestAmount - @RemainOver) WHERE Code = @ReferCode
@@ -94,6 +96,7 @@ BEGIN
 
 	IF(@ChrgRepAcc IS NOT NULL AND @PaidAmount >0)
 	BEGIN
+		EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @ChrgRepAcc, @PaidAmount, 6	
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @ChrgRepAcc, @PaidAmount
 
 		UPDATE [BNEWNORMALLOAN] SET [Tot_P_Pastdue_Amt] = ISNULL([Tot_P_Pastdue_Amt],0) + (@PaidAmount - @RemainOver)  WHERE Code = @ReferCode
@@ -102,8 +105,9 @@ BEGIN
 		
 	END
 
-	IF(@ChrgRepAcc IS NOT NULL AND @PaidInterestAmount IS NOT NULL)
+	IF(@ChrgRepAcc IS NOT NULL AND @PaidInterestAmount >0)
 	BEGIN
+		EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @ChrgRepAcc, @PaidInterestAmount, 7
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @ChrgRepAcc, @PaidInterestAmount
 		UPDATE [BNEWNORMALLOAN] SET [Tot_I_Pastdue_Amt] = ISNULL([Tot_I_Pastdue_Amt],0) + (@PaidInterestAmount - @RemainOver) WHERE Code = @ReferCode
 		UPDATE [B_LOAN_PROCESS_PAYMENT] SET [PaidInterestAmount] =  @RemainOver WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios
