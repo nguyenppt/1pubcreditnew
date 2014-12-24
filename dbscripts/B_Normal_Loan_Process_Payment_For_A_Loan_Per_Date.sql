@@ -59,7 +59,10 @@ BEGIN
 	FROM [B_NORMALLOAN_PAYMENT_SCHEDULE] 
 	WHERE [DueDate] >= @ProcessDate AND Code = @ReferCode AND [PeriodRepaid] = @RepaymentPerios ORDER BY Period ASC
 
-	EXEC @Interest = [B_Normal_Loan_Process_Payment_Get_Interested_Rate] @ReferCode, @Interest, @ProcessDate
+
+
+
+	--EXEC @Interest = [B_Normal_Loan_Process_Payment_Get_Interested_Rate] @ReferCode, @Interest, @ProcessDate
 
 	IF(@DueDate = @ProcessDate) --end of perios
 	BEGIN
@@ -86,12 +89,13 @@ BEGIN
 			--Process balance to loan account
 			EXEC [B_Normal_Loan_Process_Payment_Balance_Acc] @ReferCode
 
-			SELECT @OverduePrinciple = [OverdueCapitalAmount], @OverdueInterest = [OverdueInterestAmount], @PaidDueAmount = [PaidAmount], @PaidDueInterestAmount = [PaidInterestAmount]
+			SELECT @OverduePrinciple = [OverdueCapitalAmount], @OverdueInterest = [OverdueInterestAmount], @PaidDueAmount = [PaidAmount], 
+				@PaidDueInterestAmount = [PaidInterestAmount], @Interest = [Interest]
 			FROM [B_LOAN_PROCESS_PAYMENT] WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [Period] = @Period AND [PeriodRepaid] = @RepaymentPerios
 
 			--Balance to loan account in case of overdue	
-			SELECT @OverduePrinciple = [OverdueCapitalAmount], @OverdueInterest = [OverdueInterestAmount], @PaidDueAmount = [PaidAmount]
-			FROM [B_LOAN_PROCESS_PAYMENT] WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios
+			--SELECT @OverduePrinciple = [OverdueCapitalAmount], @OverdueInterest = [OverdueInterestAmount], @PaidDueAmount = [PaidAmount]
+			--FROM [B_LOAN_PROCESS_PAYMENT] WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios
 
 			EXEC [B_Normal_Loan_Process_Payment_Balance_Acc_Overdue] @ReferCode
 
@@ -104,7 +108,7 @@ BEGIN
 				SET @InterestAmountPerDay = (@Interest/36000)*@CurrentLoansAmount	
 
 				set @Period = @Period + 1					
-				EXEC [B_Normal_Loan_Process_Payment_AddPaymentProcess] @ReferCode, @RepaymentPerios, @Period;				
+				EXEC [B_Normal_Loan_Process_Payment_AddPaymentProcess] @ReferCode, @RepaymentPerios, @Period, @ProcessDate;				
 			END
 			
 		END	
@@ -112,9 +116,12 @@ BEGIN
 	
 	IF(EXISTS (SELECT 1 FROM [B_LOAN_PROCESS_PAYMENT] WHERE Code = @ReferCode AND [Period] = @Period AND [PeriodRepaid] = @RepaymentPerios AND ([Process_Date] IS NULL OR [Process_Date] < @ProcessDate)))
 	BEGIN
+		
+		SELECT  @Interest = [Interest], @InterestAmountPerDay = [InterestedAmountPerday]
+			FROM [B_LOAN_PROCESS_PAYMENT] WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [Period] = @Period AND [PeriodRepaid] = @RepaymentPerios
 					
-		SET @CurrentLoansAmount = @PrincipleAmount + @PrinOSAmount;
-		SET @InterestAmountPerDay = (@Interest/36000)*@CurrentLoansAmount
+		--SET @CurrentLoansAmount = @PrincipleAmount + @PrinOSAmount;
+		--SET @InterestAmountPerDay = (@Interest/36000) * @CurrentLoansAmount
 			
 		UPDATE [B_LOAN_PROCESS_PAYMENT] 
 			SET [InterestAmountCalc] = [InterestAmountCalc] + @InterestAmountPerDay,
@@ -123,7 +130,8 @@ BEGIN
 				[Process_Date] = @ProcessDate,
 				[Circle_Maturity_Date] = @DueDate,
 				[PaidAmount] = [PaidAmount] + ([OverdueCapitalAmount] * (@Interest/36000) * 0.5),
-				[PaidInterestAmount] = [PaidInterestAmount] + ([OverdueInterestAmount] * (@Interest/36000) * 0.5)
+				[PaidInterestAmount] = [PaidInterestAmount] + ([OverdueInterestAmount] * (@Interest/36000) * 0.5),
+				[ProcessedDays] = [ProcessedDays] + 1
 		WHERE Code = @ReferCode AND [Active_Flag] = 1 AND [PeriodRepaid] = @RepaymentPerios
 
 		UPDATE [B_NORMALLOAN_PAYMENT_SCHEDULE]

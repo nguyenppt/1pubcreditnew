@@ -22,7 +22,8 @@ CREATE PROCEDURE [dbo].[B_Normal_Loan_Process_Payment_AddPaymentProcess]
 (
 	@ReferCode nvarchar(50),
 	@RepaymentPerios int,
-	@Perios int
+	@Perios int,
+	@ProcessDate date
 
 )
 AS
@@ -30,6 +31,28 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;		
+		DECLARE @Interest numeric(18,5)
+		DECLARE @CurrentLoansAmount numeric(18,5)
+		DECLARE @InterestAmountPerDay numeric(18,5)
+		DECLARE @RateType nvarchar(2)
+		DECLARE @LoansAmount numeric(18,5)
+
+		SELECT @LoansAmount = LoanAmount, @RateType = RateType FROM BNEWNORMALLOAN WHERE Code = @ReferCode
+
+		SELECT TOP 1 @Interest = Interest, @CurrentLoansAmount = (PrincipalAmount + PrinOS)
+		FROM [B_NORMALLOAN_PAYMENT_SCHEDULE] 
+		WHERE  Code = @ReferCode AND [PeriodRepaid] = @RepaymentPerios AND Period = @Perios ORDER BY Period ASC
+
+		SET @Interest = ISNULL([dbo].[B_Normal_Loan_Process_Payment_Get_Interested_Rate_Func]( @ReferCode, @Interest, @ProcessDate),@Interest);
+
+		IF(@RateType = '2')
+		BEGIN
+			SET @CurrentLoansAmount = @LoansAmount
+		END
+
+		--Select @ReferCode, @RepaymentPerios, @Perios, @ProcessDate
+
+		SET @InterestAmountPerDay = @CurrentLoansAmount * (@Interest/36000) 
 
 		----create new record to track payment process
 		INSERT INTO [dbo].[B_LOAN_PROCESS_PAYMENT]
@@ -39,7 +62,7 @@ BEGIN
            ,[InterestAmountCalc] ,[OverdueCapitalAmount],[OverdueInterestAmount]
            ,[LoanAmount],[PaidAmount],[PaidInterestAmount]
            ,[Circle_Begin_Date],[Circle_Maturity_Date],[Active_Flag]
-           ,[Process_Date],[CreateBy],[CreateDate],[PeriodRepaid])
+           ,[Process_Date],[CreateBy],[CreateDate],[PeriodRepaid], [Interest], [InterestedAmountPerday])
 		SELECT 
 			nl.[Code],@Perios,nl.[CustomerID]
            ,nl.[PrinRepAccount] ,nl.[IntRepAccount],nl.[ChrgRepAccount]
@@ -47,7 +70,7 @@ BEGIN
            ,0,0,0
            ,(SELECT TOP 1 [LoanAmount] FROM [BNEWNORMALLOAN_REPAYMENT] WHERE [Code] = @ReferCode AND [RepaymentTimes] = @RepaymentPerios) ,0 ,0
            ,(SELECT TOP 1 [Drawdown] FROM [B_NORMALLOAN_PAYMENT_SCHEDULE] WHERE [Code] = @ReferCode AND [Period] = @Perios) ,NULL , 1
-           ,NULL, 1 , GETDATE(), @RepaymentPerios
+           ,NULL, 1 , GETDATE(), @RepaymentPerios, ISNULL(@Interest,0), ISNULL(@InterestAmountPerDay,0)
 		FROM [BNEWNORMALLOAN] nl 
 		WHERE nl.[Code] = @ReferCode;
 

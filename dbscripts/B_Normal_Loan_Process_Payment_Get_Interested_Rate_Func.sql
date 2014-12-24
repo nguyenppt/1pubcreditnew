@@ -1,11 +1,4 @@
 
-IF EXISTS(SELECT * FROM sys.procedures WHERE NAME = 'B_Normal_Loan_Process_Payment_Get_Interested_Rate')
-BEGIN
-/****** Object:  StoredProcedure [dbo].[B_Normal_Loan_Process_Payment_For_A_Loan_Per_Date]    Script Date: 10/12/2014 8:38:26 AM ******/
-DROP PROCEDURE [dbo].[B_Normal_Loan_Process_Payment_Get_Interested_Rate]
-END
-GO
-
 /****** Object:  StoredProcedure [dbo].[B_Normal_Loan_Process_Payment_For_A_Loan_Per_Date]    Script Date: 10/12/2014 8:38:26 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -19,13 +12,14 @@ GO
 -- Create date: 10-Oct-2014
 -- Description:	it is used to process for payment and interest amount of Loan Contract
 -- =============================================
-CREATE PROCEDURE [dbo].[B_Normal_Loan_Process_Payment_Get_Interested_Rate]
+CREATE FUNCTION [dbo].[B_Normal_Loan_Process_Payment_Get_Interested_Rate_Func]
 (
 	-- Add the parameters for the stored procedure here
 	@ReferCode nvarchar(50),
 	@CurrentInterest numeric(18,5),
 	@ProcessDate datetime
 )
+RETURNS DECIMAL(18,4)
 AS
 BEGIN
 
