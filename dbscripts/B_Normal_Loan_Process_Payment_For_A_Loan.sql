@@ -42,30 +42,22 @@ BEGIN
 	WHERE p.Code = @ReferCode AND [PeriodRepaid] = @RepaymentPerios
 	ORDER BY p.Period DESC
 
-	--IF (@lastExecDate IS NULL AND @customerID IS NULL)
-	--BEGIN
-		----create new record to track payment process
-		--EXEC [B_Normal_Loan_Process_Payment_AddPaymentProcess] @ReferCode, @RepaymentPerios, 1, @EndDate;
-		
-		--UPDATE [BNEWNORMALLOAN] SET [Tot_P_Pay_Amt] = 0, [Tot_I_Pay_Amt] = 0, [Tot_P_Pastdue_Amt] = 0, [Tot_I_Pastdue_Amt] = 0 WHERE [Code] = @ReferCode;
-
-	--END
-	--ELSE
-	--BEGIN
-	--	--Select 'ton tai ne', @lastExecDate as lastDate, @customerID as customerID
-	--END
+	
 
 	-- check if lastExecDate is null, the asign it to drawdown date
 	IF(@lastExecDate IS NULL)
 	BEGIN
+
+		UPDATE [BNEWNORMALLOAN] SET [LoanAmount_Actual] = 0 WHERE [Code] = @ReferCode
 		SELECT TOP 1 @lastExecDate = [Drawdown] FROM [B_NORMALLOAN_PAYMENT_SCHEDULE] WHERE [Code] = @ReferCode AND [Period] = 1 AND [PeriodRepaid] = @RepaymentPerios;
 
 		IF(@lastExecDate IS NOT NULL)
 		BEGIN
 			SET @lastExecDate = DATEADD(day,-1,@lastExecDate)
+			EXEC [B_Normal_Loan_Process_Payment_AddPaymentProcess] @ReferCode, @RepaymentPerios, 1, @lastExecDate;
 		END
 
-		EXEC [B_Normal_Loan_Process_Payment_AddPaymentProcess] @ReferCode, @RepaymentPerios, 1, @lastExecDate;
+		
 	END
 	--Select 'ton tai ne2', @lastExecDate as lastDate, @customerID as customerID
 	--Start process payment, only process if last execute date not empty
@@ -75,6 +67,8 @@ BEGIN
 		BEGIN
 			SET @lastExecDate = DATEADD(day,1,@lastExecDate) -- go to next day
 			--Select 'ton tai ne3', @lastExecDate as lastDate, @customerID as customerID
+			--Credit to Acc
+			Exec [B_Normal_Loan_Process_Credit_To_LoanAcc] @ReferCode, @lastExecDate;
 			EXEC [dbo].[B_Normal_Loan_Process_Payment_For_A_Loan_Per_Date] @ReferCode, @lastExecDate;
 			--Select 'B_Normal_Loan_Process_Payment_For_A_Loan_Per_Date: ' ,@ReferCode ,@lastExecDate			
 		END

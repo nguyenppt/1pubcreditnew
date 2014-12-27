@@ -36,10 +36,24 @@ BEGIN
 		DECLARE @InterestAmountPerDay numeric(18,5)
 		DECLARE @RateType nvarchar(2)
 		DECLARE @LoansAmount numeric(18,5)
+		DECLARE @DrawdownDate datetime
 
-		SELECT @LoansAmount = LoanAmount, @RateType = RateType FROM BNEWNORMALLOAN WHERE Code = @ReferCode
+		SELECT @LoansAmount = LoanAmount, @RateType = RateType, @CurrentLoansAmount = LoanAmountRemain, @DrawdownDate = [Drawdown] FROM BNEWNORMALLOAN WHERE Code = @ReferCode
 
-		SELECT TOP 1 @Interest = Interest, @CurrentLoansAmount = (PrincipalAmount + PrinOS)
+		IF(@Perios = 1)
+		BEGIN
+			IF(@DrawdownDate IS NOT NULL)
+			BEGIN
+				SET @CurrentLoansAmount = @LoansAmount
+			END
+			ELSE
+			BEGIN
+				SELECT TOP 1 @CurrentLoansAmount = DisbursalAmount FROM B_LOAN_DISBURSAL_SCHEDULE WHERE Code = @ReferCode ORDER BY DisbursalDate ASC
+			END
+		END
+
+
+		SELECT TOP 1 @Interest = Interest
 		FROM [B_NORMALLOAN_PAYMENT_SCHEDULE] 
 		WHERE  Code = @ReferCode AND [PeriodRepaid] = @RepaymentPerios AND Period = @Perios ORDER BY Period ASC
 

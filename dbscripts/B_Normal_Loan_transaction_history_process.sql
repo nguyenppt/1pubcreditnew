@@ -30,10 +30,12 @@ CREATE PROCEDURE [dbo].[B_Normal_Loan_transaction_history_process]
 )
 AS
 BEGIN
+	
 	DECLARE @TxnType nvarchar(50)
 	DECLARE @Balance decimal(18,4)
 	DECLARE @NewBalance decimal(18,4)
 
+	
 	SET @TxnType = 'UNKNOWN'
 
 	SELECT @TxnType =	CASE @Type
@@ -49,7 +51,8 @@ BEGIN
 
     IF(@AccountNo IS NOT NULL AND @AccountNo != '')
 	BEGIN
-	
+		
+
 		SELECT @Balance = [dbo].B_Normal_Loan_Process_Payment_GetCurrentAmount_Func(@AccountNo);
 
 		IF(@Type = 1  or @Type = 8)
@@ -63,7 +66,6 @@ BEGIN
 	
 		SET @NewBalance = @Balance + @TxnAmount
 	
-
 		INSERT INTO [dbo].[B_LOAN_TRANSACTION_HISTORY]
 			   ([TxnId]
 			   ,[TxnType]
@@ -80,7 +82,7 @@ BEGIN
 			   ,@TxnAmount
 			   ,@Balance
 			   ,@NewBalance
-			   ,GETDATE()
+			   , GETDATE()
 			   ,@UserId
 			   ,@AccountNo)
 

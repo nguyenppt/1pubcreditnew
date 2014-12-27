@@ -38,6 +38,7 @@ BEGIN
 
 	EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, @UserID, @AccountID, @SubtractAmount,2 
 	EXEC @RemainAmount = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @AccountID, @SubtractAmount
+	UPDATE [BNEWNORMALLOAN] SET  [LoanAmountRemain] = [LoanAmountRemain] - @SubtractAmount  WHERE Code = @ReferCode
 
 	SELECT 1;
 

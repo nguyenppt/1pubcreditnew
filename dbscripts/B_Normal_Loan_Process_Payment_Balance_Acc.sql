@@ -77,7 +77,7 @@ BEGIN
 
 		EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @PrinRepAcc, @PrincipleAmount, 4
 		EXEC @RemainOver = [B_Normal_Loan_Process_Payment_Subtract_To_Account] @PrinRepAcc, @PrincipleAmount
-		UPDATE [BNEWNORMALLOAN] SET [Tot_P_Pay_Amt] = ISNULL([Tot_P_Pay_Amt],0) + (@PrincipleAmount - @RemainOver) WHERE Code = @ReferCode
+		UPDATE [BNEWNORMALLOAN] SET [Tot_P_Pay_Amt] = ISNULL([Tot_P_Pay_Amt],0) + (@PrincipleAmount - @RemainOver), [LoanAmountRemain] = [LoanAmountRemain] - (@PrincipleAmount - @RemainOver)  WHERE Code = @ReferCode
 
 		IF(@RemainOver>0)
 		BEGIN

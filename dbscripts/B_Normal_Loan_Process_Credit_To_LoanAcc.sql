@@ -21,6 +21,7 @@ GO
 CREATE PROCEDURE [dbo].[B_Normal_Loan_Process_Credit_To_LoanAcc]
 (
 	-- Add the parameters for the stored procedure here
+	@ReferCode nvarchar(50),
 	@EndDateProcess datetime
 )
 AS
@@ -34,102 +35,72 @@ BEGIN
 		SET @EndDateProcess = GETDATE();
 	END
 
-	Declare @ReferCode nvarchar(50);
 	DECLARE @CreditAcc nvarchar(50);
 	DECLARE @LoanAmount decimal(18,4);
+	DECLARE @LoanAmountActual decimal(18,4);
+	DECLARE @DrawdownDate datetime;
 
 
-	DECLARE LoanContractList_Cursor_Credit CURSOR FOR
-		Select Code from BNEWNORMALLOAN where MaturityDate >= @EndDateProcess AND status = 'AUT'
-		AND	Code in (select distinct Code from [B_NORMALLOAN_PAYMENT_SCHEDULE])
-		AND [Drawdown] IS NOT NULL
-		AND [LoanAmount] > ISNULL([LoanAmount_Actual], 0)
-		AND [Drawdown] <= @EndDateProcess
-	
-	OPEN LoanContractList_Cursor_Credit;
-	--loop all associate loan contract
-	FETCH NEXT FROM LoanContractList_Cursor_Credit INTO @ReferCode 
-
-    WHILE @@FETCH_STATUS = 0
+	SELECT  @CreditAcc = [CreditAccount], @LoanAmount = [LoanAmount], @LoanAmountActual =  ISNULL([LoanAmount_Actual],0),  @DrawdownDate = [Drawdown]
+	FROM [BNEWNORMALLOAN] WHERE Code = @ReferCode
+	IF(@LoanAmount > @LoanAmountActual)
 	BEGIN
-		-- process payment/interest from a loan contract
-		SELECT  @CreditAcc = [CreditAccount], @LoanAmount = [LoanAmount]  FROM [BNEWNORMALLOAN] WHERE Code = @ReferCode
-		IF(@CreditAcc IS NOT NULL)
-		BEGIN
-	
-			--Add history transaction Loan Input
-			EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @CreditAcc, @LoanAmount, 1 
-			EXEC [B_Normal_Loan_Process_Payment_Credit_To_Account] @CreditAcc, @LoanAmount
 
-			UPDATE BNEWNORMALLOAN 
-				SET [LoanAmount_Actual] = [LoanAmount] 
-			WHERE [Code] = @ReferCode
+		If(@DrawdownDate IS NOT NULL)
+		BEGIN
+			IF(@CreditAcc IS NOT NULL AND @LoanAmount > @LoanAmountActual AND @DrawdownDate <= @EndDateProcess)
+			BEGIN
+	
+				--Add history transaction Loan Input
+				EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @CreditAcc, @LoanAmount, 1
+				EXEC [B_Normal_Loan_Process_Payment_Credit_To_Account] @CreditAcc, @LoanAmount
+
+				UPDATE BNEWNORMALLOAN 
+					SET [LoanAmount_Actual] = [LoanAmount],
+					[LoanAmountRemain] = @LoanAmount
+				 
+				WHERE [Code] = @ReferCode
 
 			
+			END
 		END
-
-		FETCH NEXT FROM LoanContractList_Cursor_Credit INTO @ReferCode;
-    END
-
-	CLOSE LoanContractList_Cursor_Credit;
-    DEALLOCATE LoanContractList_Cursor_Credit;
-
-	
-	--Process for disbursal
-
-	DECLARE LoanContractList_Cursor_Credit_Disb CURSOR FOR
-		Select Code from BNEWNORMALLOAN where MaturityDate >= @EndDateProcess AND status = 'AUT'
-		AND	Code in (select distinct Code from [B_NORMALLOAN_PAYMENT_SCHEDULE])
-		AND [Drawdown] IS NULL
-		AND [LoanAmount] > ISNULL([LoanAmount_Actual], 0)
-	
-	OPEN LoanContractList_Cursor_Credit_Disb;
-	--loop all associate loan contract
-	FETCH NEXT FROM LoanContractList_Cursor_Credit_Disb INTO @ReferCode 
-
-    WHILE @@FETCH_STATUS = 0
-	BEGIN
-		-- process payment/interest from a loan contract
-		SELECT  @CreditAcc = [CreditAccount], @LoanAmount = SUM(ISNULL([DisbursalAmount], 0))
-		FROM [BNEWNORMALLOAN] INNER JOIN [B_LOAN_DISBURSAL_SCHEDULE] ON [BNEWNORMALLOAN].[Code] = [B_LOAN_DISBURSAL_SCHEDULE].[Code]
-		WHERE [BNEWNORMALLOAN].[Code] = @ReferCode 
-			AND [IsCreditToAcc] = 0 
-			AND (
-					([DrawdownDate] IS NOT NULL AND  [DrawdownDate] <= @EndDateProcess)
-					OR
-					([DrawdownDate] IS NULL AND  [DisbursalDate] <= @EndDateProcess)
-				)			
-		GROUP BY [BNEWNORMALLOAN].[Code], [CreditAccount]
-
-		IF(@CreditAcc IS NOT NULL)
+		ELSE -- disbursal case
 		BEGIN
-
-
-			--Add history transaction Disbursal Process
-			EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @CreditAcc, @LoanAmount,8 
-			EXEC [B_Normal_Loan_Process_Payment_Credit_To_Account] @CreditAcc, @LoanAmount
-
-			UPDATE BNEWNORMALLOAN 
-				SET [LoanAmount_Actual] =  ISNULL([LoanAmount_Actual],0) + @LoanAmount
-			WHERE [Code] = @ReferCode
-
-			UPDATE [B_LOAN_DISBURSAL_SCHEDULE] 
-				SET [IsCreditToAcc] = 1 
-			WHERE [Code] = @ReferCode 
-				AND [IsCreditToAcc] = 0 
+			SELECT TOP 1 @DrawdownDate = ISNULL([DrawdownDate], DisbursalDate), @LoanAmount = DisbursalAmount FROM [B_LOAN_DISBURSAL_SCHEDULE] 
+			WHERE [Code] = @ReferCode AND [IsCreditToAcc] = 0 
 				AND (
-					([DrawdownDate] IS NOT NULL AND  [DrawdownDate] <= @EndDateProcess)
-					OR
-					([DrawdownDate] IS NULL AND  [DisbursalDate] <= @EndDateProcess)
-					)
+						([DrawdownDate] IS NOT NULL AND  [DrawdownDate] <= @EndDateProcess)
+						OR
+						([DrawdownDate] IS NULL AND  [DisbursalDate] <= @EndDateProcess)
+					)			
+		
+		
+
+			IF(@CreditAcc IS NOT NULL AND @EndDateProcess IS NOT NULL AND @DrawdownDate <= @EndDateProcess)
+			BEGIN
+
+				--Add history transaction Disbursal Process
+				EXEC [B_Normal_Loan_transaction_history_process] @ReferCode, 1, @CreditAcc, @LoanAmount,8 
+				EXEC [B_Normal_Loan_Process_Payment_Credit_To_Account] @CreditAcc, @LoanAmount
+
+				UPDATE BNEWNORMALLOAN 
+					SET [LoanAmount_Actual] =  ISNULL([LoanAmount_Actual],0) + @LoanAmount,
+					[LoanAmountRemain] = [LoanAmountRemain] + @LoanAmount
+				WHERE [Code] = @ReferCode
+
+				UPDATE [B_LOAN_DISBURSAL_SCHEDULE] 
+					SET [IsCreditToAcc] = 1 
+				WHERE [Code] = @ReferCode 
+					AND [IsCreditToAcc] = 0 
+					AND (
+						([DrawdownDate] IS NOT NULL AND  [DrawdownDate] <= @EndDateProcess)
+						OR
+						([DrawdownDate] IS NULL AND  [DisbursalDate] <= @EndDateProcess)
+						)
+			END
 		END
-		FETCH NEXT FROM LoanContractList_Cursor_Credit_Disb INTO @ReferCode;
-    END
-
-	CLOSE LoanContractList_Cursor_Credit_Disb;
-    DEALLOCATE LoanContractList_Cursor_Credit_Disb;
-
-
+	
+	END
 	
 END
 

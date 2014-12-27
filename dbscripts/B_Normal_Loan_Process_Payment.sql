@@ -66,14 +66,10 @@ BEGIN
 		END
 		Declare @ReferCode nvarchar(50);
 
-	--Credit to Acc
-	Exec [B_Normal_Loan_Process_Credit_To_LoanAcc] @EndDateProcess
-
-
-
+	
 		DECLARE LoanContractList_Cursor CURSOR FOR
-			Select Code from BNEWNORMALLOAN where MaturityDate >= @EndDateProcess AND status = 'AUT'
-			AND	Code in (select distinct Code from [B_NORMALLOAN_PAYMENT_SCHEDULE])
+			Select Code from BNEWNORMALLOAN where ISNULL(LoanAmountRemain,0) > 0 AND status = 'AUT'
+			--AND	Code in (select distinct Code from [B_NORMALLOAN_PAYMENT_SCHEDULE])
 	
 		OPEN LoanContractList_Cursor;
 		--loop all associate loan contract
