@@ -14,5 +14,11 @@ namespace BankProject.DBRespository
             Expression<Func<B_ExchangeRates, bool>> query = t => t.Currency.Equals(currency);
             return Find(query);
         }
+
+        public IQueryable<B_ExchangeRates> GetAll()
+        {
+            return base.GetAll().OrderBy(t => t.Currency);
+
+        }
     }
 }

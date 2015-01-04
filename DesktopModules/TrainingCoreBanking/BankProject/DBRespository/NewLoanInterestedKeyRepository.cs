@@ -16,5 +16,11 @@ namespace BankProject.DBRespository
             return Find(query);
         }
 
+        public IQueryable<BLOANINTEREST_KEY> GetAll()
+        {
+            return base.GetAll().OrderBy(t => t.MonthLoanRateNo);
+
+        }
+
     }
 }
