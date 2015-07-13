@@ -279,12 +279,13 @@ namespace BankProject.DataProvider
             , string CollateralTypeName, string CollateralCode, string CollateralName, string CollReqdAmt, string CollReqdPct, string UptoPeriod, string PeriodAmt
             , string PeriodPct, decimal MaxSecured, decimal MaxUnSecured, decimal MaxTotal, string OtherSecured, string CollateralRight, string AmtSecured
             , string Onlinelimit, string AvailableAmt, string TotalOutstand, string ApprovedUser, string MainComtType, double? InternalLimitAmt, double? AdvisedAmt
-            ,string ProductID , string ProductName)
+            , string ProductID, string ProductName, DateTime? ApproveDate, DateTime? OfferedUnti, DateTime? ExpiryDate, DateTime? ProposalDate, DateTime? AvailableDate)
         {
             sqldata.ndkExecuteNonQuery("B_CUSTOMER_LIMIT_SUB_Insert_Update",MainLimitID, SubLimitID, CustomerID, SubCommitmentType, STTSub, mode, CollateralTypeCode
                                         , CollateralTypeName, CollateralCode, CollateralName, CollReqdAmt, CollReqdPct, UptoPeriod, PeriodAmt
                                         , PeriodPct, MaxSecured, MaxUnSecured, MaxTotal, OtherSecured, CollateralRight, AmtSecured
-                                        , Onlinelimit, AvailableAmt, TotalOutstand, ApprovedUser, MainComtType, InternalLimitAmt, AdvisedAmt, ProductID, ProductName);
+                                        , Onlinelimit, AvailableAmt, TotalOutstand, ApprovedUser, MainComtType, InternalLimitAmt, AdvisedAmt, ProductID, ProductName
+                                        , ApproveDate, OfferedUnti, ExpiryDate, ProposalDate, AvailableDate);
         }
         public static DataSet B_CUSTOMER_LIMIT_SUB_check_SubLimitID(string SubLimitID)
         {
