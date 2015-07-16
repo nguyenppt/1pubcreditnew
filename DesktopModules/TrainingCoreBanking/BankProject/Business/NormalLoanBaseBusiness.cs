@@ -43,6 +43,7 @@ namespace BankProject.Business
             drInfor[dsOut.Cl_loadAmountRepayment] = getCurrentLoanAmount(normalLoanEntryM, replaymentTimes);
             drInfor[dsOut.Cl_interestKey] = "";
             drInfor[dsOut.Cl_interest] = 0;
+            drInfor[dsOut.Cl_valueDate] = normalLoanEntryM.ValueDate;
             dsOut.DtInfor.Rows.Add(drInfor);
 
             bool isDisbursal = normalLoanEntryM.Drawdown == null ? true : false;
@@ -56,6 +57,15 @@ namespace BankProject.Business
             }
             //Process interest
             InterestProcess(ref dsOut, normalLoanEntryM, replaymentTimes, disbursalDate);
+
+
+            DataRow rowD = dsOut.DateReport.NewRow();
+
+            DateTime today = normalLoanEntryM.ValueDate == null ? DateTime.Today : (DateTime)normalLoanEntryM.ValueDate;
+            rowD["day"] = today.ToString("dd");
+            rowD["month"] = today.ToString("MM");
+            rowD["year"] = today.ToString("yyyy");
+            dsOut.DateReport.Rows.Add(rowD);
 
             return dsOut;
         }

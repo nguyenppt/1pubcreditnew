@@ -244,10 +244,10 @@ namespace BankProject.DataProvider
         #region B_DEFINE_CUSTOMER_LIMIT
         public static void B_CUSTOMER_LIMIT_Insert_Update(string MainLimitID, string CustomerID, string CommitmentType, string CurrencyCode, string CountryCode, string CountryName
             , DateTime? ApprovedDate, DateTime? OfferedUntil, DateTime? ExpiryDate, DateTime? Proposaldate, DateTime? AvailableDate, decimal? InternalLimitAmt
-            , decimal? AdvisedAmt, decimal? OriginalLimit, string Note, string Mode, decimal? MaxTotal, string ApprovedUser)
+            , decimal? AdvisedAmt, decimal? OriginalLimit, string Note, string Mode, decimal? MaxTotal, string ApprovedUser, decimal? MaxSecured, decimal? MaxUnsecured)
         {
              sqldata.ndkExecuteNonQuery("B_CUSTOMER_LIMIT_Insert_Update", MainLimitID, CustomerID, CommitmentType, CurrencyCode, CountryCode, CountryName
-            , ApprovedDate, OfferedUntil, ExpiryDate, Proposaldate, AvailableDate, InternalLimitAmt, AdvisedAmt, OriginalLimit, Note, Mode, MaxTotal, ApprovedUser);
+            , ApprovedDate, OfferedUntil, ExpiryDate, Proposaldate, AvailableDate, InternalLimitAmt, AdvisedAmt, OriginalLimit, Note, Mode, MaxTotal, ApprovedUser, MaxSecured, MaxUnsecured);
         }
         public static string B_CUSTOMER_LIMIT_Check_CustomerID(string CustomerID)
         {

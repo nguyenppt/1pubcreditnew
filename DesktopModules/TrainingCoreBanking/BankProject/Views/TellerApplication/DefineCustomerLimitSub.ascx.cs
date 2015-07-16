@@ -158,7 +158,8 @@ namespace BankProject.Views.TellerApplication
                                 TriTT.B_CUSTOMER_LIMIT_Insert_Update(LimitID, CustomerID, HanMucCha, rcbCurrency.SelectedValue, rcbCountry.SelectedValue, rcbCountry.Text.Replace(rcbCountry.SelectedValue + " - ", "")
                                 , RdpApprovedDate.SelectedDate, RdpOfferedUnit.SelectedDate, rdpExpiryDate.SelectedDate, RdpProposalDate.SelectedDate, RdpAvailableDate.SelectedDate
                                 , tbIntLimitAmt.Text != "" ? Convert.ToDecimal(tbIntLimitAmt.Text.Replace(",", "")) : 0, tbAdvisedAmt.Text != "" ? Convert.ToDecimal(tbAdvisedAmt.Text.Replace(",", "")) : 0, 0,
-                                tbNote.Text, rcbFandA.SelectedValue, tbMaxTotal.Text != "" ? Convert.ToDecimal(tbMaxTotal.Text.Replace(",", "")) : 0, UserInfo.Username.ToString());
+                                tbNote.Text, rcbFandA.SelectedValue, tbMaxTotal.Text != "" ? Convert.ToDecimal(tbMaxTotal.Text.Replace(",", "")) : 0, UserInfo.Username.ToString(), tbMaxSecured.Text != "" ? Convert.ToDecimal(tbMaxSecured.Text.Replace(",", "")) : 0
+                                , tbMaxUnsecured.Text != "" ? Convert.ToDecimal(tbMaxUnsecured.Text.Replace(",", "")) : 0);
                                 Response.Redirect("Default.aspx?tabid=359");
                             }
                             else { ShowMsgBox("Customer ID is not exists, Please check again !"); return; }
@@ -379,6 +380,10 @@ namespace BankProject.Views.TellerApplication
             else if (HanMucCon == "8700") { KieuHanMuc = "8000"; }
             Load_MainLimit_DataToReview(CustomerID + "." + KieuHanMuc); //Load data cho phan Han muc cha
             tbLimitID.Text = SubLimitID;
+
+            tbCustomerID.Text = CustomerID;
+            LoadCustomerName(tbCustomerID.Text);
+            rcbGlobalLimit.SelectedValue = HanMucCon;
 
             ExchangeRatesRepository exchangeFacade = new ExchangeRatesRepository();
             var exchangeRate = exchangeFacade.GetRate("USD").FirstOrDefault();
