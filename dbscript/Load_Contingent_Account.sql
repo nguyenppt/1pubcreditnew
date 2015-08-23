@@ -1,5 +1,3 @@
-USE [bisolutions_vvcb]
-GO
 
 /****** Object:  StoredProcedure [dbo].[Load_Contingent_Account]    Script Date: 13/11/2014 2:20:19 PM ******/
 SET ANSI_NULLS ON

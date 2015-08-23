@@ -1,5 +1,3 @@
-USE [bisolutions_vvcb]
-GO
 
 IF EXISTS(SELECT * FROM sys.procedures WHERE NAME = 'B_Normal_Loan_Process_Payment_Subtract_To_Account')
 BEGIN

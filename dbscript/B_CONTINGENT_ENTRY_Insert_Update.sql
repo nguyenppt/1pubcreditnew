@@ -1,5 +1,4 @@
-USE [bisolutions_vvcb]
-GO
+
 
 /****** Object:  StoredProcedure [dbo].[B_CONTINGENT_ENTRY_Insert_Update]    Script Date: 13/11/2014 2:20:48 PM ******/
 SET ANSI_NULLS ON

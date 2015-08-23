@@ -1,5 +1,3 @@
-USE [bisolutions_vvcb]
-GO
 
 /****** Object:  StoredProcedure [dbo].[BCONTINGENT_ENQUIRY]    Script Date: 13/11/2014 2:21:47 PM ******/
 SET ANSI_NULLS ON

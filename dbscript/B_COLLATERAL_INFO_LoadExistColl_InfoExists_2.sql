@@ -1,5 +1,3 @@
-USE [bisolutions_vvcb]
-GO
 
 /****** Object:  StoredProcedure [dbo].[B_COLLATERAL_INFO_LoadExistColl_InfoExists_2]    Script Date: 13/11/2014 2:21:18 PM ******/
 SET ANSI_NULLS ON
